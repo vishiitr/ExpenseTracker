@@ -1,11 +1,13 @@
 package com.iitr.vishal.expensetracker.Processor.Banks;
 
 import com.iitr.vishal.expensetracker.Common.Constants;
+import com.iitr.vishal.expensetracker.Common.Formatter;
 import com.iitr.vishal.expensetracker.Model.SmsModel;
 import com.iitr.vishal.expensetracker.Model.TranscationModel;
 import com.iitr.vishal.expensetracker.Processor.BankProcessor;
 
 import java.text.DateFormat;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +19,8 @@ import java.util.regex.Pattern;
  */
 
 public class CitiBankProcessor implements BankProcessor.IBankProcessor {
-    private final String spendingRegex = "(Rs\\.|Rs\\s|INR\\s)?([\\d,\\.]*).*spent.*XXX(\\d+)\\son\\s(.{9,11})\\sat\\s([a-zA-Z0-9\\s]+\\.?).*";
+    //private final String spendingRegex = "(Rs\\.|Rs\\s|INR\\s)?([\\d,\\.]*).*spent.*XXX(\\d+)\\son\\s(.{9,11})\\sat\\s([a-zA-Z0-9\\s]+\\.?).*";
+    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant +".*";
 
     @Override
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
@@ -25,13 +28,11 @@ public class CitiBankProcessor implements BankProcessor.IBankProcessor {
         Matcher m = p.matcher(smsModel.getMsg());
 
         if (m.matches()) {
-            float spentAmount = Float.parseFloat(m.group(2).replaceAll(",", ""));
-            String spendingCard = m.group(3);
-            String spentDate = m.group(4);
-            String spentAt = m.group(5);
-
-            //long bankId = saveBank(Constants.BANKNAMECITI, spendingCard);
-            //saveTranscation(smsModel.getId(), spentAmount, spentDate, spentAt, bankId);
+            String amount = Formatter.nullToEmptyString(m.group(2)) + Formatter.nullToEmptyString(m.group(3)) + Formatter.nullToEmptyString(m.group(4));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = m.group(5);
+            String spentDate = m.group(6);
+            String spentAt = m.group(7);
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
@@ -56,6 +57,5 @@ public class CitiBankProcessor implements BankProcessor.IBankProcessor {
             e.printStackTrace();
         }
         return date;
-        //BankProcessor.saveTranscation(Integer.parseInt(id), spentAmount, date, spentAt, bankId);
     }
 }

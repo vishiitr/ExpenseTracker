@@ -1,5 +1,6 @@
 package com.iitr.vishal.expensetracker.Common;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -39,5 +40,19 @@ public class Formatter {
         String[] yearMonthArray = yearMonth.split("-");
         int month = Integer.parseInt(yearMonthArray[1]);
         return MonthArray[month - 1] + "'" + yearMonthArray[0].substring(2);
+    }
+
+    public static String monthDbFormatter(String monthYear) {
+        String[] yearMonthArray = monthYear.split("'");
+        int index = Arrays.asList(MonthArray).indexOf(yearMonthArray[0]);
+        index++;
+        if (index < 10)
+            return "20" + yearMonthArray[1] + "-0" + index;
+        else
+            return "20" + yearMonthArray[1] + "-" + index;
+    }
+
+    public static String nullToEmptyString(String str) {
+        return str == null ? "" : str;
     }
 }

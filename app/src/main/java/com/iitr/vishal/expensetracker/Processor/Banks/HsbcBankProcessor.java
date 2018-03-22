@@ -1,6 +1,7 @@
 package com.iitr.vishal.expensetracker.Processor.Banks;
 
 import com.iitr.vishal.expensetracker.Common.Constants;
+import com.iitr.vishal.expensetracker.Common.Formatter;
 import com.iitr.vishal.expensetracker.Model.SmsModel;
 import com.iitr.vishal.expensetracker.Model.TranscationModel;
 import com.iitr.vishal.expensetracker.Processor.BankProcessor;
@@ -17,7 +18,8 @@ import java.util.regex.Pattern;
  */
 
 public class HsbcBankProcessor implements BankProcessor.IBankProcessor {
-    private final String spendingRegex = ".*xxxx(\\d+).*INR\\s([\\d,.]+)\\son\\s([\\d\\/]+)\\sat\\s([a-zA-Z0-9\\s]*\\.?)\\..*";
+    //private final String spendingRegex = ".*xxxx(\\d+).*INR\\s([\\d,.]+)\\son\\s([\\d\\/]+)\\sat\\s([a-zA-Z0-9\\s]*\\.?)\\..*";
+    private static final String spendingRegex = ".*" + Constants.RegexConstants.Card + " is used for " + Constants.RegexConstants.Money + " on " + Constants.RegexConstants.DateWithNumber + " at " + Constants.RegexConstants.Merchant + ".*";
 
     @Override
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
@@ -25,10 +27,11 @@ public class HsbcBankProcessor implements BankProcessor.IBankProcessor {
         Matcher m = p.matcher(smsModel.getMsg());
 
         if (m.matches()) {
-            float spentAmount = Float.parseFloat(m.group(2).replaceAll(",", ""));
+            String amount = Formatter.nullToEmptyString(m.group(3)) + Formatter.nullToEmptyString(m.group(4)) + Formatter.nullToEmptyString(m.group(5));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
             String spendingCard = m.group(1);
-            String spentDate = m.group(3);
-            String spentAt = m.group(4);
+            String spentDate = m.group(6);
+            String spentAt = m.group(7);
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;

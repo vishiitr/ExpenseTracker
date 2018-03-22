@@ -1,7 +1,7 @@
 package com.iitr.vishal.expensetracker;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +19,26 @@ public class ExpenseFragment extends Fragment {
     public AppDatabase appDatabase;
 
     public ExpenseFragment() {
-        appDatabase = AppDatabase.getAppDatabase(getActivity());
+        super();
+        setArguments(new Bundle());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expense, container, false);
-        monthsListView = (ListView) view.findViewById(R.id.months_list);
-
-        new RecentExpenseTask(this).execute();
+        appDatabase = AppDatabase.getAppDatabase(getActivity());
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        monthsListView = (ListView) getActivity().findViewById(R.id.months_list);
+        String monthName = getArguments().getString("monthName");
+        new RecentExpenseTask(this).execute(monthName);
     }
 
 }

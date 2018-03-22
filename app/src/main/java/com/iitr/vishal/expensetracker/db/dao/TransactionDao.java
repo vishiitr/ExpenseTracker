@@ -29,6 +29,9 @@ public interface TransactionDao {
     @Query("SELECT * FROM Transactions where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') = '2017-10' order by spent_date desc")
     List<TransactionEntity> getAllTransactions();
 
+    @Query("SELECT * FROM Transactions where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName order by spent_date desc")
+    List<TransactionEntity> getMonthlyTransactions(String monthName);
+
     @Query("SELECT * FROM Transactions order by Id desc limit 5 ")
     List<TransactionEntity> getRecentTransactions();
 

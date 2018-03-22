@@ -83,7 +83,7 @@ public class MonthlyExpenseTask extends AsyncTask<Void, Void, List<MonthlyExpens
             barChart.setVisibleXRangeMaximum(6);
             barChart.moveViewToX(labels.size() - 6);
             barChart.getXAxis().setTextColor(Color.WHITE);
-
+            barChart.setOnChartValueSelectedListener(activityReference.get());
         }
     }
 }

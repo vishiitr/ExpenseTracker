@@ -18,14 +18,14 @@
         android:layout_centerHorizontal="true"
          />
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/fragment_places"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:background="#E0E0E0"
         android:orientation="vertical">
 
         <fragment
-            android:id="@+id/fragment_place"
+            android:id="@+id/recent_expenses"
             android:name="com.iitr.vishal.expensetracker.ExpenseFragment"
             android:layout_width="match_parent"
             android:layout_height="300dp"
