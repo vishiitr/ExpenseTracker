@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class IndusBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = ".*XX(\\d{4}).*INR\\s([\\d,\\.]*) on ([0-9\\/]*).*at\\s([a-zA-Z0-9\\s]*\\.?)\\sis.*";
-    private final static String spendingRegex = ".*" + "[xX]{2}(\\d{4})" + " for " + Constants.RegexConstants.Money +" on " + Constants.RegexConstants.DateWithNumber+".* at "+ "([a-zA-Z0-9 ]*)\\s{0,1}" + ".*";
+    private final static String spendingRegex = ".*" + "[xX]{2}(\\d{4})" + " for " + Constants.RegexConstants.Money +" on " + Constants.RegexConstants.DateWithNumber+".* at "+ "([a-zA-Z0-9 ]*)" + "is [Aa]pproved.*";
 
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
         Pattern p = Pattern.compile(spendingRegex);
@@ -30,7 +30,7 @@ public class IndusBankProcessor implements BankProcessor.IBankProcessor {
             float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
             String spendingCard = m.group(1);
             String spentDate = m.group(6);
-            String spentAt = m.group(7).replaceAll("is Approved","").trim();
+            String spentAt = m.group(7).trim();
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
