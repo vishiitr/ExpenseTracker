@@ -2,6 +2,7 @@ package com.iitr.vishal.expensetracker;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import com.iitr.vishal.expensetracker.db.AppDatabase;
  */
 public class ExpenseFragment extends Fragment {
 
-    public ListView monthsListView;
+    public RecyclerView monthsListView;
     public AppDatabase appDatabase;
 
     public ExpenseFragment() {
@@ -36,7 +37,7 @@ public class ExpenseFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        monthsListView = (ListView) getActivity().findViewById(R.id.months_list);
+        monthsListView = (RecyclerView) getActivity().findViewById(R.id.months_list);
         String monthName = getArguments().getString("monthName");
         new RecentExpenseTask(this).execute(monthName);
     }

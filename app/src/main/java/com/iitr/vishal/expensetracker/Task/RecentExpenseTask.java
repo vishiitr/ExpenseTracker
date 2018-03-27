@@ -1,6 +1,9 @@
 package com.iitr.vishal.expensetracker.Task;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.iitr.vishal.expensetracker.Adapter.ExpenseAdapter;
@@ -18,6 +21,8 @@ import java.util.List;
 
 public class RecentExpenseTask extends AsyncTask<String, Void, ArrayList<TransactionEntity>> {
     private WeakReference<ExpenseFragment> activityReference; // only retain a weak reference to the activity
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView mRecyclerView;
 
     public RecentExpenseTask(ExpenseFragment context) {
         activityReference = new WeakReference<>(context);
@@ -40,6 +45,9 @@ public class RecentExpenseTask extends AsyncTask<String, Void, ArrayList<Transac
 
     protected void onPostExecute(ArrayList<TransactionEntity> notes) {
         ExpenseAdapter expenseAdapter = new ExpenseAdapter(activityReference.get().getActivity(), notes);
-        activityReference.get().monthsListView.setAdapter(expenseAdapter);
+        mLayoutManager = new LinearLayoutManager(activityReference.get().getActivity());
+        mRecyclerView = activityReference.get().monthsListView;
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(expenseAdapter);
     }
 }
