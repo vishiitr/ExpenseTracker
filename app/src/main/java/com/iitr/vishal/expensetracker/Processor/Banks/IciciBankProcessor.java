@@ -9,6 +9,7 @@ import com.iitr.vishal.expensetracker.Processor.BankProcessor;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,11 +21,14 @@ import java.util.regex.Pattern;
 public class IciciBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = ".*INR\\s([\\d,\\.]+).*xxx(\\d+).*at\\s([a-zA-Z0-9\\s\\.]*)\\son\\s(.{9,11})\\..*";
     private static final String spendingRegex = ".*" + Constants.RegexConstants.Money + " using .*" + Constants.RegexConstants.Card + ".* at " + Constants.RegexConstants.Merchant + " on " + Constants.RegexConstants.DateWithName + ".*";
+    private final static String billingRegex = ".*stmt for.*" + "[xX]{2}(\\d{4})" + ".* of " + Constants.RegexConstants.Money +" or.*" + ".*by " + Constants.RegexConstants.DateWithName + "\\.";
 
     @Override
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
         Pattern p = Pattern.compile(spendingRegex);
         Matcher m = p.matcher(smsModel.getMsg());
+        Pattern billingPattern = Pattern.compile(billingRegex);
+        Matcher billingMatcher = billingPattern.matcher(smsModel.getMsg());
 
         if (m.matches()) {
             String amount = Formatter.nullToEmptyString(m.group(2)) + Formatter.nullToEmptyString(m.group(3)) + Formatter.nullToEmptyString(m.group(4));
@@ -37,7 +41,19 @@ public class IciciBankProcessor implements BankProcessor.IBankProcessor {
             transcationModel.spendingCard = spendingCard;
             transcationModel.spentAt = spentAt;
             transcationModel.spentAmount = spentAmount;
-            transcationModel.spendingCard = spentAt;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMEICICI;
+            transcationModel.spentDate = convertToDate(spentDate);
+            return transcationModel;
+        } else if (billingMatcher.matches()) {
+            String amount = Formatter.nullToEmptyString(billingMatcher.group(3)) + Formatter.nullToEmptyString(billingMatcher.group(4)) + Formatter.nullToEmptyString(billingMatcher.group(5));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = billingMatcher.group(1);
+            String spentDate = billingMatcher.group(6);
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAmount = spentAmount;
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMEICICI;
             transcationModel.spentDate = convertToDate(spentDate);

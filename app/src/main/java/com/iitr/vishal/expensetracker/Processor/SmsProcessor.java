@@ -8,6 +8,7 @@ import android.provider.Telephony;
 import com.iitr.vishal.expensetracker.Model.SmsModel;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
 
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 /**
@@ -38,7 +39,7 @@ public class SmsProcessor {
         }
         long lastSmsId = getLastSmsId();
         String where = "abs(" + Telephony.Sms.ADDRESS + ")=0.0 and _id > " + lastSmsId ;
-        cursor = cr.query(Telephony.Sms.CONTENT_URI, null, where, null, "_id desc");
+        cursor = cr.query(Telephony.Sms.CONTENT_URI, null, where, null, "_id asc");
         if (cursor != null) {
             totalSmsCount = cursor.getCount();
         } else
@@ -60,8 +61,8 @@ public class SmsProcessor {
                 smsModel.setTime(cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE)));
                 smsModel.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS)));
                 smsModel.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY)));
-                //Date dateFormat = new Date(Long.valueOf(smsDate));
-
+                Date dateFormat = new Date(Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE))));
+                smsModel.setSmsDate(dateFormat);
                 saveToDatabasae(smsModel);
                 cursor.moveToNext();
             }

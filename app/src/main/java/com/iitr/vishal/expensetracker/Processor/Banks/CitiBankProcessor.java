@@ -20,30 +20,67 @@ import java.util.regex.Pattern;
 
 public class CitiBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = "(Rs\\.|Rs\\s|INR\\s)?([\\d,\\.]*).*spent.*XXX(\\d+)\\son\\s(.{9,11})\\sat\\s([a-zA-Z0-9\\s]+\\.?).*";
-    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant +".*";
-
+    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*";
+    private final static String reminderRegex = "Reminder: .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.DateWithName + ".*=" + Constants.RegexConstants.Money + ".*";
+    private final static String billingRegex = "Mini Statement .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.Money +".*Minimum.*" + Constants.RegexConstants.DateWithName +".*Refer.*";
     @Override
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
-        Pattern p = Pattern.compile(spendingRegex);
-        Matcher m = p.matcher(smsModel.getMsg());
+        Pattern spendPattern = Pattern.compile(spendingRegex);
+        Matcher spendMatcher = spendPattern.matcher(smsModel.getMsg());
 
-        if (m.matches()) {
-            String amount = Formatter.nullToEmptyString(m.group(2)) + Formatter.nullToEmptyString(m.group(3)) + Formatter.nullToEmptyString(m.group(4));
+        Pattern reminderPattern = Pattern.compile(reminderRegex);
+        Matcher reminderMatcher = reminderPattern.matcher(smsModel.getMsg());
+
+        Pattern billingPattern = Pattern.compile(billingRegex);
+        Matcher billingMatcher = billingPattern.matcher(smsModel.getMsg());
+
+        if (spendMatcher.matches()) {
+            String amount = Formatter.nullToEmptyString(spendMatcher.group(2)) + Formatter.nullToEmptyString(spendMatcher.group(3)) + Formatter.nullToEmptyString(spendMatcher.group(4));
             float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
-            String spendingCard = m.group(5);
-            String spentDate = m.group(6);
-            String spentAt = m.group(7);
+            String spendingCard = spendMatcher.group(5);
+            String spentDate = spendMatcher.group(6);
+            String spentAt = spendMatcher.group(7);
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
             transcationModel.spentAt = spentAt;
             transcationModel.spentAmount = spentAmount;
-            transcationModel.spendingCard = spentAt;
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMECITI;
             transcationModel.spentDate = convertToDate(spentDate);
             return transcationModel;
         }
+        else if(reminderMatcher.matches())
+        {
+            String amount = Formatter.nullToEmptyString(reminderMatcher.group(4)) + Formatter.nullToEmptyString(reminderMatcher.group(5)) + Formatter.nullToEmptyString(reminderMatcher.group(6));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = reminderMatcher.group(1);
+            String spentDate = reminderMatcher.group(2);
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAmount = spentAmount;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMECITI;
+            transcationModel.spentDate = convertToDate(spentDate);
+            return transcationModel;
+        }
+        else if(billingMatcher.matches())
+        {
+            String amount = Formatter.nullToEmptyString(billingMatcher.group(3)) + Formatter.nullToEmptyString(billingMatcher.group(4)) + Formatter.nullToEmptyString(billingMatcher.group(5));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = billingMatcher.group(1);
+            String spentDate = billingMatcher.group(6);
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAmount = spentAmount;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMECITI;
+            transcationModel.spentDate = convertToDate(spentDate);
+            return transcationModel;
+        }
+
         return null;
     }
 

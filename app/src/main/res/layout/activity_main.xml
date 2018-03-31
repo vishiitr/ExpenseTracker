@@ -16,11 +16,11 @@
             android:id="@+id/main.collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:collapsedTitleTextAppearance="@style/ExpandingToolbarLayoutExpandedTextStyle"
             app:contentScrim="@color/colorDarkTeal"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
-            app:collapsedTitleTextAppearance="@style/ExpandingToolbarLayoutExpandedTextStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.github.mikephil.charting.charts.BarChart
@@ -29,16 +29,15 @@
                 android:layout_height="300dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                app:layout_collapseMode="parallax"/>
+                app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/main.toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="Expense Tracker"
                 app:layout_collapseMode="parallax"
-                />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:title="Expense Tracker" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -49,12 +48,27 @@
         android:background="#E0E0E0"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <fragment
-            android:id="@+id/recent_expenses"
-            android:name="com.iitr.vishal.expensetracker.ExpenseFragment"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_margin="7dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <fragment
+                android:id="@+id/recent_expenses"
+                android:name="com.iitr.vishal.expensetracker.ExpenseFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="7dp"
+                android:layout_weight="1"
+                />
+
+            <fragment
+                android:id="@+id/reminders"
+                android:name="com.iitr.vishal.expensetracker.ReminderFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="7dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
 

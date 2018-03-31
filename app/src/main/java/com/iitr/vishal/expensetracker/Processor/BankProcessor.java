@@ -13,8 +13,10 @@ import com.iitr.vishal.expensetracker.Processor.Banks.IciciBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.IndusBankProcessor;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
 import com.iitr.vishal.expensetracker.db.dao.BankDao;
+import com.iitr.vishal.expensetracker.db.dao.ReminderDao;
 import com.iitr.vishal.expensetracker.db.dao.TransactionDao;
 import com.iitr.vishal.expensetracker.db.entity.BankEntity;
+import com.iitr.vishal.expensetracker.db.entity.ReminderEntity;
 import com.iitr.vishal.expensetracker.db.entity.TransactionEntity;
 
 import java.util.Date;
@@ -51,7 +53,10 @@ public class BankProcessor {
             TranscationModel transcationModel = bankProcessor.onSaveTranscation(smsModel);
             if (transcationModel != null) {
                 bankId = saveBank(transcationModel.bankName, transcationModel.spendingCard);
-                saveTranscation(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, transcationModel.spentAt, bankId);
+                if (transcationModel.spentAt != null && !transcationModel.spentAt.isEmpty())//it means its a transcation sms
+                    saveTranscation(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, transcationModel.spentAt, bankId);
+                else
+                    saveReminder(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, bankId);
             }
         }
     }
@@ -72,5 +77,10 @@ public class BankProcessor {
     public void saveTranscation(long id, float spentAmount, Date spentDate, String spentAt, long bankId) {
         TransactionDao transactionDao = AppDatabase.getAppDatabase(context).transactionDao();
         transactionDao.insert(new TransactionEntity(id, spentAmount, spentAt, spentDate, bankId));
+    }
+
+    public void saveReminder(long id, float spentAmount, Date spentDate, long bankId) {
+        ReminderDao reminderDao = AppDatabase.getAppDatabase(context).reminderDao();
+        reminderDao.insert(new ReminderEntity(id, spentAmount, spentDate, bankId));
     }
 }

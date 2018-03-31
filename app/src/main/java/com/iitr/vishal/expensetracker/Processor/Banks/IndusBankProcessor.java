@@ -9,6 +9,7 @@ import com.iitr.vishal.expensetracker.Processor.BankProcessor;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,27 +20,65 @@ import java.util.regex.Pattern;
 
 public class IndusBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = ".*XX(\\d{4}).*INR\\s([\\d,\\.]*) on ([0-9\\/]*).*at\\s([a-zA-Z0-9\\s]*\\.?)\\sis.*";
-    private final static String spendingRegex = ".*" + "[xX]{2}(\\d{4})" + " for " + Constants.RegexConstants.Money +" on " + Constants.RegexConstants.DateWithNumber+".* at "+ Constants.RegexConstants.Merchant + "[ ]*is [Aa]pproved.*";
+    private final static String spendingRegex = ".*" + "[xX]{2}(\\d{4})" + " for " + Constants.RegexConstants.Money + " on " + Constants.RegexConstants.DateWithNumber + ".* at " + Constants.RegexConstants.Merchant + "[ ]*is [Aa]pproved.*";
+    private final static String reminderRegex = ".*statement generated.*" + Constants.RegexConstants.Card + " total.*" + Constants.RegexConstants.Money + " &.*" + Constants.RegexConstants.DateWithName + "\\..*";
+    private final static String billingRegex = ".*statement.*" + Constants.RegexConstants.Card + ".* due " + "(\\d{2}-[A-Z]{3}) will.*" + "is " + Constants.RegexConstants.Money + ".*";
 
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
-        Pattern p = Pattern.compile(spendingRegex);
-        Matcher m = p.matcher(smsModel.getMsg());
+        Pattern spendPattern = Pattern.compile(spendingRegex);
+        Matcher spendMatcher = spendPattern.matcher(smsModel.getMsg());
 
-        if (m.matches()) {
-            String amount = Formatter.nullToEmptyString(m.group(3)) + Formatter.nullToEmptyString(m.group(4)) + Formatter.nullToEmptyString(m.group(5));
+        Pattern reminderPattern = Pattern.compile(reminderRegex);
+        Matcher reminderMatcher = reminderPattern.matcher(smsModel.getMsg());
+
+        Pattern billingPattern = Pattern.compile(billingRegex);
+        Matcher billingMatcher = billingPattern.matcher(smsModel.getMsg());
+
+        if (spendMatcher.matches()) {
+            String amount = Formatter.nullToEmptyString(spendMatcher.group(3)) + Formatter.nullToEmptyString(spendMatcher.group(4)) + Formatter.nullToEmptyString(spendMatcher.group(5));
             float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
-            String spendingCard = m.group(1);
-            String spentDate = m.group(6);
-            String spentAt = m.group(7).trim();
+            String spendingCard = spendMatcher.group(1);
+            String spentDate = spendMatcher.group(6);
+            String spentAt = spendMatcher.group(7).trim();
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
             transcationModel.spentAt = spentAt;
             transcationModel.spentAmount = spentAmount;
-            transcationModel.spendingCard = spentAt;
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMEINDUS;
             transcationModel.spentDate = convertToDate(spentDate);
+            return transcationModel;
+        }
+        /*else if (reminderMatcher.matches()) {
+            String amount = Formatter.nullToEmptyString(reminderMatcher.group(4)) + Formatter.nullToEmptyString(reminderMatcher.group(5)) + Formatter.nullToEmptyString(reminderMatcher.group(6));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = reminderMatcher.group(1);
+            String spentDate = reminderMatcher.group(2);
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAmount = spentAmount;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMECITI;
+            transcationModel.spentDate = convertToDate3(spentDate);
+            return transcationModel;
+        }*/
+        else if (billingMatcher.matches()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(smsModel.getSmsDate());
+
+            String amount = Formatter.nullToEmptyString(billingMatcher.group(4)) + Formatter.nullToEmptyString(billingMatcher.group(5)) + Formatter.nullToEmptyString(billingMatcher.group(6));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = billingMatcher.group(1);
+            String spentDate = billingMatcher.group(2) + "-" + calendar.get(Calendar.YEAR);
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAmount = spentAmount;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMEINDUS;
+            transcationModel.spentDate = convertToDate2(spentDate);
             return transcationModel;
         }
         return null;
@@ -47,6 +86,17 @@ public class IndusBankProcessor implements BankProcessor.IBankProcessor {
 
     private Date convertToDate(String spentDate) {
         DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yy");
+        Date date = null;
+        try {
+            date = sourceFormat.parse(spentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    private Date convertToDate2(String spentDate) {
+        DateFormat sourceFormat = new SimpleDateFormat("dd-MMM-yyyy");
         Date date = null;
         try {
             date = sourceFormat.parse(spentDate);

@@ -1,5 +1,7 @@
 package com.iitr.vishal.expensetracker.Model;
 
+import java.util.Date;
+
 /**
  * Created by Divya on 17-03-2018.
  */
@@ -11,6 +13,7 @@ public class SmsModel {
     private String _readState; //"0" for have not read sms and "1" for have read sms
     private String _time;
     private String _folderName;
+    private Date _smsDate;
 
     public String getId(){
         return _id;
@@ -30,6 +33,7 @@ public class SmsModel {
     public String getFolderName(){
         return _folderName;
     }
+    public Date getSmsDate(){return _smsDate;}
 
 
     public void setId(String id){
@@ -50,4 +54,5 @@ public class SmsModel {
     public void setFolderName(String folderName){
         _folderName = folderName;
     }
+    public void setSmsDate(Date smsDate){_smsDate = smsDate;}
 }

@@ -37,7 +37,6 @@ public class HsbcBankProcessor implements BankProcessor.IBankProcessor {
             transcationModel.spendingCard = spendingCard;
             transcationModel.spentAt = spentAt;
             transcationModel.spentAmount = spentAmount;
-            transcationModel.spendingCard = spentAt;
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMEHSBC;
             transcationModel.spentDate = convertToDate(spentDate);
