@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.iitr.vishal.expensetracker.SplashscreenActivity"
     android:orientation="vertical"
-    android:background="@color/colorDarkTeal">
+    android:background="@color/colorSkyBlue">
     <TextView
         android:id="@+id/namever"
         android:layout_width="wrap_content"

@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorDarkTeal">#008080</color>
-    <color name="colorLightBlue">#87CEFA</color>
+    <color name="colorSkyBlue">#76a6ef</color>
+    <color name="colorLightBlue">#028090</color>
+    <color name="iconPink">#ef6394</color>
+    <color name="charColor">#028090</color>
 </resources>

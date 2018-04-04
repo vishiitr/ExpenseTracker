@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-
     tools:context=".MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:fitsSystemWindows="true">
@@ -17,11 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:collapsedTitleTextAppearance="@style/ExpandingToolbarLayoutExpandedTextStyle"
-            app:contentScrim="@color/colorDarkTeal"
+            app:contentScrim="@color/colorSkyBlue"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed|snap">
+
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barchart"
@@ -29,7 +30,29 @@
                 android:layout_height="300dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="parallax">
+
+            </com.github.mikephil.charting.charts.BarChart>
+
+            <LinearLayout
+                android:id="@+id/spinnerLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:paddingRight="20dp"
+                android:paddingLeft="40dp"
+                >
+
+                <Spinner
+                    android:id="@+id/travelType_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@drawable/spinner"
+                    />
+            </LinearLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/main.toolbar"
@@ -37,14 +60,17 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="parallax"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="Expense Tracker" />
+                app:title="Expense Tracker">
+
+
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/fragment_places"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:background="#E0E0E0"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -52,14 +78,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <fragment
                 android:id="@+id/recent_expenses"
                 android:name="com.iitr.vishal.expensetracker.ExpenseFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="7dp"
-                android:layout_weight="1"
-                />
+                android:layout_weight="1" />
 
             <fragment
                 android:id="@+id/reminders"
@@ -67,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="7dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

@@ -1,51 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_margin="10dp">
 
-    <ImageView
+    <!--    <ImageView
+            android:id="@+id/shoppingIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/shoppingpurse"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>-->
+    <LinearLayout
         android:id="@+id/shoppingIcon"
         android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/shoppingpurse"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="17dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="15 March 2018"
-        android:textColor="#C0C0C0"
-        android:textSize="11sp"
-        android:layout_toRightOf="@+id/shoppingIcon"/>
+        <TextView
+            android:id="@+id/date_month"
+            android:layout_width="35dp"
+            android:layout_height="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/date_month"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingBottom="3dp"
+            android:text="Mar"
+            android:textColor="#fff"
+            android:textSize="11dp" />
+
+        <TextView
+            android:id="@+id/date_day"
+            android:layout_width="35dp"
+            android:layout_height="24dp"
+            android:layout_weight="5"
+            android:background="@drawable/date_day"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="25"
+            android:textSize="16dp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/bankName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/date"
-        android:layout_marginBottom="10dp"
+
         android:layout_marginLeft="10dp"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_toRightOf="@+id/shoppingIcon"/>
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/shoppingIcon"
+        android:textSize="16dp"
+         />
+
+    <TextView
+        android:id="@+id/cardNbr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="11dp"
+        android:layout_toRightOf="@+id/bankName"
+        android:textSize="13dp" />
 
     <TextView
         android:id="@+id/amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bankName"
-        android:layout_alignBottom="@+id/bankName"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@id/bankName"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/shoppingIcon"
         android:textColor="#343434"
-        android:textSize="15sp"
-        android:layout_marginRight="25dp"
-        android:textStyle="bold"/>
+        android:textSize="13sp" />
 </RelativeLayout>

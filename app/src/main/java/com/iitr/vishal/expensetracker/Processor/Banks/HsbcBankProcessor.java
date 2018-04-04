@@ -20,18 +20,36 @@ import java.util.regex.Pattern;
 public class HsbcBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = ".*xxxx(\\d+).*INR\\s([\\d,.]+)\\son\\s([\\d\\/]+)\\sat\\s([a-zA-Z0-9\\s]*\\.?)\\..*";
     private static final String spendingRegex = ".*" + Constants.RegexConstants.Card + " is used for " + Constants.RegexConstants.Money + " on " + Constants.RegexConstants.DateWithNumber + " at " + Constants.RegexConstants.Merchant + ".*";
-
+private static final String spendingRegex2 = ".*" + Constants.RegexConstants.Card + " has been used at" + Constants.RegexConstants.Merchant + " for " + Constants.RegexConstants.Money + " on " + Constants.RegexConstants.DateWithNumber + ".*";
     @Override
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
-        Pattern p = Pattern.compile(spendingRegex);
-        Matcher m = p.matcher(smsModel.getMsg());
+        Pattern spendingPattern = Pattern.compile(spendingRegex);
+        Pattern spendingPattern2 = Pattern.compile(spendingRegex2);
+        Matcher spendingMatch = spendingPattern.matcher(smsModel.getMsg());
+        Matcher spendingMatch2 = spendingPattern2.matcher(smsModel.getMsg());
 
-        if (m.matches()) {
-            String amount = Formatter.nullToEmptyString(m.group(3)) + Formatter.nullToEmptyString(m.group(4)) + Formatter.nullToEmptyString(m.group(5));
+        if (spendingMatch.matches()) {
+            String amount = Formatter.nullToEmptyString(spendingMatch.group(3)) + Formatter.nullToEmptyString(spendingMatch.group(4)) + Formatter.nullToEmptyString(spendingMatch.group(5));
             float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
-            String spendingCard = m.group(1);
-            String spentDate = m.group(6);
-            String spentAt = m.group(7);
+            String spendingCard = spendingMatch.group(1);
+            String spentDate = spendingMatch.group(6);
+            String spentAt = spendingMatch.group(7);
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAt = spentAt;
+            transcationModel.spentAmount = spentAmount;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMEHSBC;
+            transcationModel.spentDate = convertToDate(spentDate);
+            return transcationModel;
+        }
+        if (spendingMatch2.matches()) {
+            String amount = Formatter.nullToEmptyString(spendingMatch2.group(4)) + Formatter.nullToEmptyString(spendingMatch2.group(5)) + Formatter.nullToEmptyString(spendingMatch2.group(6));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = spendingMatch2.group(1);
+            String spentDate = spendingMatch2.group(7);
+            String spentAt = spendingMatch2.group(2);
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;

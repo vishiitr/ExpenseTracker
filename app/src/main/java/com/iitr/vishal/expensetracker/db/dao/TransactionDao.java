@@ -43,7 +43,7 @@ public interface TransactionDao {
 
     @Query("SELECT SUM(amount) as expenditure, \n" +
             "       strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') as 'month_year' \n" +
-            "       from Transactions group by strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') order by spent_date desc")
+            "       from Transactions group by strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') order by spent_date desc limit 6")
     List<MonthlyExpenseModel> getMonthlyExpenditure();
 
 }

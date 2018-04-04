@@ -8,8 +8,21 @@
         android:id="@+id/shoppingIcon"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:padding="5dp"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/shoppingpurse"
+        android:src="@drawable/shopping_cart_2"
+        android:layout_centerVertical="true"
+        android:background="@color/iconPink"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:id="@+id/maskIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/mask_icon"
         android:layout_centerVertical="true"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"

@@ -12,9 +12,11 @@
     <style name="CollapsingToolbarLayoutExpandedTextStyle" parent="AppTheme">
         <item name="android:textColor">@android:color/transparent</item>
         <item name="android:textSize">0sp</item>
-        <item name="android:background">@color/colorDarkTeal</item>
+        <item name="android:background">@color/colorSkyBlue</item>
     </style>
     <style name="ExpandingToolbarLayoutExpandedTextStyle" parent="AppTheme">
         <item name="android:textColor">@android:color/white</item>
     </style>
+
+
 </resources>

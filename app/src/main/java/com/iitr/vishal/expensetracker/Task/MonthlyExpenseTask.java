@@ -1,17 +1,24 @@
 package com.iitr.vishal.expensetracker.Task;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.iitr.vishal.expensetracker.Common.Formatter;
 import com.iitr.vishal.expensetracker.Common.MoneyFormatter;
 import com.iitr.vishal.expensetracker.MainActivity;
 import com.iitr.vishal.expensetracker.Model.MonthlyExpenseModel;
+import com.iitr.vishal.expensetracker.MonthlyexpenseActivity;
 import com.iitr.vishal.expensetracker.R;
 import com.iitr.vishal.expensetracker.db.entity.TransactionEntity;
 
@@ -64,6 +71,7 @@ public class MonthlyExpenseTask extends AsyncTask<Void, Void, List<MonthlyExpens
             bardataset.setBarSpacePercent(65f);
             bardataset.setColor(Color.WHITE);
             bardataset.setValueTextColor(Color.WHITE);
+            bardataset.setValueTextSize(12);
             BarData data = new BarData(labels, bardataset);
             data.setValueFormatter(new MoneyFormatter());
             barChart.setData(data); // set the data and list of lables into chart
@@ -77,13 +85,38 @@ public class MonthlyExpenseTask extends AsyncTask<Void, Void, List<MonthlyExpens
             barChart.setPinchZoom(false);
             barChart.setDoubleTapToZoomEnabled(false);
             barChart.getLegend().setEnabled(false);
-            barChart.setBackgroundColor(Color.rgb(0, 128, 128)); //set whatever color you prefer
+            barChart.setBackgroundColor(Color.rgb(2, 128, 144)); //set whatever color you prefer
             barChart.setDrawGridBackground(false);// this is a must
 
             barChart.setVisibleXRangeMaximum(6);
             barChart.moveViewToX(labels.size() - 6);
+
+            //barChart.centerViewTo(labels.size(), notes.get(labels.size() - 6).getExpenditure(), YAxis.AxisDependency.LEFT);
+            //barChart.zoom(labels.size()/labels.size(),500000/notes.get(labels.size() - 6).getExpenditure(),1,1);
             barChart.getXAxis().setTextColor(Color.WHITE);
-            barChart.setOnChartValueSelectedListener(activityReference.get());
+            barChart.getXAxis().setTextSize(12);
+            barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                @Override
+                public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                    List<String> values = ((BarChart) activityReference.get().findViewById(R.id.barchart)).getXAxis().getValues();
+                    String value = values.get(e.getXIndex());
+                    Intent intent = new Intent(activityReference.get(), MonthlyexpenseActivity.class);
+                    Bundle bundle = new Bundle();
+
+                    //Add your data to bundle
+                    bundle.putString("monthName", value);
+
+                    //Add the bundle to the intent
+                    intent.putExtras(bundle);
+                    activityReference.get().startActivity(intent);
+                }
+
+                @Override
+                public void onNothingSelected() {
+
+                }
+            });
+
         }
     }
 }
