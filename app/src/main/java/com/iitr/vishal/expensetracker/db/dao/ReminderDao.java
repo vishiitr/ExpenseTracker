@@ -16,10 +16,14 @@ import java.util.List;
 
 @Dao
 public interface ReminderDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(ReminderEntity repo);
 
-    @Query("SELECT Reminders.Id,Reminders.reminder_date as reminderDate, Reminders.amount, BanksNCard.bank_name || '-' || BanksNCard.card_nbr  as bankName " +
+    @Query("SELECT Reminders.Id,Reminders.reminder_date as reminderDate, Reminders.amount, BanksNCard.bank_name || '-' || BanksNCard.card_nbr  as bankName ,Reminders.reminderSet as isReminderSet " +
                 "FROM Reminders INNER JOIN BanksNCard ON Reminders.bank_id = BanksNCard.Id where reminder_date/1000 > (julianday('now') - 2440587.5)*86400.0 order by reminder_date asc")
     List<ReminderModel> getAllReminders();
+
+    @Query("UPDATE Reminders SET reminderSet = :isSetReminderSet  WHERE id = :tid")
+    void updateReminderAlarmStatus(boolean isSetReminderSet, long tid);
+
 }

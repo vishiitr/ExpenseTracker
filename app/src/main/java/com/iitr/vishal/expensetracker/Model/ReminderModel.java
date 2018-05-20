@@ -14,4 +14,6 @@ public class ReminderModel {
     public Date reminderDate;
 
     public String bankName;
+
+    public boolean isReminderSet;
 }

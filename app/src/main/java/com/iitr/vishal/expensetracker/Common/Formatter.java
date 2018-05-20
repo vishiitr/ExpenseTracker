@@ -30,10 +30,10 @@ public class Formatter {
         Long divideBy = e.getKey();
         String suffix = e.getValue();
 
-        long truncated = value / (divideBy / 10); //the number part of the output times 10
+        long truncated = value / (divideBy / 100); //the number part of the output times 10
         boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
         //return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
-        return (truncated / 10d) + suffix;
+        return (truncated / 100d) + suffix;
     }
 
     public static String monthFormatter(String yearMonth) {

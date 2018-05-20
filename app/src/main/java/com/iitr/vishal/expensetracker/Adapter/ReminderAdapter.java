@@ -6,15 +6,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.iitr.vishal.expensetracker.Alarm.AlarmReceiver;
+import com.iitr.vishal.expensetracker.Alarm.NotificationScheduler;
 import com.iitr.vishal.expensetracker.Model.ReminderModel;
 import com.iitr.vishal.expensetracker.R;
+import com.iitr.vishal.expensetracker.db.AppDatabase;
+import com.iitr.vishal.expensetracker.db.dao.ReminderDao;
 import com.iitr.vishal.expensetracker.db.entity.ReminderEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Divya on 27-03-2018.
@@ -37,14 +45,29 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
     public ReminderAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ReminderAdapter.ViewHolder holder;
         // if (convertView == null) {
-        View convertView = layoutInflater.inflate(R.layout.layout_reminder_row, null);
+        final View convertView = layoutInflater.inflate(R.layout.layout_reminder_row, null);
         holder = new ReminderAdapter.ViewHolder(convertView);
         holder.amountView = (TextView) convertView.findViewById(R.id.amount);
         holder.bankNameView = (TextView) convertView.findViewById(R.id.bankName);
         holder.dateDayView = (TextView) convertView.findViewById(R.id.date_day);
         holder.dateMonthView = (TextView) convertView.findViewById(R.id.date_month);
         holder.cardNbrView = (TextView) convertView.findViewById(R.id.cardNbr);
+        holder.reminderView = (Switch) convertView.findViewById(R.id.reminderSwitch);
+        holder.reminderView.setTag(holder);
 
+        holder.reminderView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.MINUTE,2);
+                    NotificationScheduler.setReminder(layoutInflater.getContext(), AlarmReceiver.class, cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+                } else {
+                    NotificationScheduler.cancelReminder(layoutInflater.getContext(), AlarmReceiver.class);
+                }
+                AppDatabase.getAppDatabase(layoutInflater.getContext()).reminderDao().updateReminderAlarmStatus(isChecked,((ViewHolder)compoundButton.getTag()).rowId);
+            }
+        });
         //  convertView.setTag(holder);
         //} else {
         //  holder = (ViewHolder) convertView.getTag();
@@ -63,6 +86,8 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         holder.dateDayView.setText(date[0]);
         holder.dateMonthView.setText(date[1]);
         holder.cardNbrView.setText(cardDetails[1]);
+        holder.reminderView.setChecked(listData.get(position).isReminderSet);
+        holder.rowId = listData.get(position).Id;
     }
 
     @Override
@@ -82,6 +107,8 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         TextView dateDayView;
         TextView dateMonthView;
         TextView cardNbrView;
+        Switch reminderView;
+        long rowId;
         public ViewHolder(View itemView) {
             super(itemView);
         }

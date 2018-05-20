@@ -33,23 +33,25 @@ import java.util.stream.Collectors;
  * Created by Divya on 17-03-2018.
  */
 
-public class MonthlyExpenseTask extends AsyncTask<Void, Void, List<MonthlyExpenseModel>> {
+public class ExpenseChartTask extends AsyncTask<Integer, Void, List<MonthlyExpenseModel>> {
     private WeakReference<MainActivity> activityReference; // only retain a weak reference to the activity
 
-    public MonthlyExpenseTask(MainActivity context) {
+    int range = 6;
+
+    public ExpenseChartTask(MainActivity context) {
         activityReference = new WeakReference<>(context);
     }
 
     @Override
-    protected List<MonthlyExpenseModel> doInBackground(Void... voids) {
-        List<TransactionEntity> transactionEntities =  activityReference.get().appDatabase.transactionDao().getAllTransactions();
-        ArrayList<Float> entries = new ArrayList<>();
-        for (TransactionEntity item : transactionEntities) {
-            entries.add(item.getAmount());
-        }
-
+    protected List<MonthlyExpenseModel> doInBackground(Integer... params) {
+        //List<TransactionEntity> transactionEntities =  activityReference.get().appDatabase.transactionDao().getAllTransactions();
+        //ArrayList<Float> entries = new ArrayList<>();
+        //for (TransactionEntity item : transactionEntities) {
+        //    entries.add(item.getAmount());
+        //}
+        range = params[0];
         if (activityReference.get() != null)
-            return activityReference.get().appDatabase.transactionDao().getMonthlyExpenditure();
+            return activityReference.get().appDatabase.transactionDao().getMonthlyExpenditure(range);
         else return null;
     }
 
@@ -88,13 +90,26 @@ public class MonthlyExpenseTask extends AsyncTask<Void, Void, List<MonthlyExpens
             barChart.setBackgroundColor(Color.rgb(2, 128, 144)); //set whatever color you prefer
             barChart.setDrawGridBackground(false);// this is a must
 
-            barChart.setVisibleXRangeMaximum(6);
-            barChart.moveViewToX(labels.size() - 6);
+            //barChart.setVisibleXRangeMaximum(range);
+            //barChart.moveViewToX(labels.size() - range);
 
             //barChart.centerViewTo(labels.size(), notes.get(labels.size() - 6).getExpenditure(), YAxis.AxisDependency.LEFT);
             //barChart.zoom(labels.size()/labels.size(),500000/notes.get(labels.size() - 6).getExpenditure(),1,1);
-            barChart.getXAxis().setTextColor(Color.WHITE);
-            barChart.getXAxis().setTextSize(12);
+            XAxis xAxis = barChart.getXAxis();
+            xAxis.setTextColor(Color.WHITE);
+            xAxis.setTextSize(12);
+            xAxis.setLabelsToSkip(0);
+            if(range>6)
+            {
+                xAxis.setLabelRotationAngle(-45);
+                barChart.setExtraBottomOffset(28f);
+            }
+            else
+            {
+                xAxis.setLabelRotationAngle(0);
+                barChart.setExtraBottomOffset(-18f);
+            }
+
             barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
                 @Override
                 public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {

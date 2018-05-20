@@ -3,35 +3,23 @@ package com.iitr.vishal.expensetracker;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.view.MotionEvent;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
-import android.widget.Toolbar;
+import android.widget.LinearLayout;
 
 import com.facebook.stetho.Stetho;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.iitr.vishal.expensetracker.Task.MonthlyExpenseTask;
+import com.iitr.vishal.expensetracker.Task.ExpenseChartTask;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity {
 
     public AppDatabase appDatabase;
-    private Spinner spinner;
+    private FloatingActionButton monthFab, yearFab;
+    LinearLayout monthLayout, yearLayout;
+    private boolean is6Month = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +28,14 @@ public class MainActivity extends Activity  {
         setContentView(R.layout.activity_main);
         displayList();
 
-        spinner = (Spinner) findViewById(R.id.travelType_spinner);
-
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("6 Month");
-        categories.add("1 Year");
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-
-        findViewById(R.id.spinnerLayout).setOnClickListener(new View.OnClickListener() {
+        monthFab = findViewById(R.id.monthFab);
+        monthLayout = findViewById(R.id.monthSelection);
+        yearLayout = findViewById(R.id.yearSelection);
+        yearLayout.setVisibility(View.INVISIBLE);
+        monthFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spinner.performClick();
+                ReDrawChart();
             }
         });
     }
@@ -73,8 +49,23 @@ public class MainActivity extends Activity  {
         bundle.putString("monthName", "");
 
         //Draw chart
-        new MonthlyExpenseTask(this).execute();
+        new ExpenseChartTask(this).execute(6);
     }
 
+    private void ReDrawChart() {
+        if (is6Month) {
+            is6Month = false;
+            monthLayout.setVisibility(View.GONE);
+            yearLayout.setVisibility(View.VISIBLE);
 
+            //Draw chart
+            new ExpenseChartTask(this).execute(12);
+        } else {
+            is6Month = true;
+            monthLayout.setVisibility(View.VISIBLE);
+            yearLayout.setVisibility(View.GONE);
+            new ExpenseChartTask(this).execute(6);
+        }
+    }
 }
+

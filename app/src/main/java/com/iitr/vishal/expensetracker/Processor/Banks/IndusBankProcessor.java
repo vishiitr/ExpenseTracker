@@ -22,7 +22,8 @@ public class IndusBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = ".*XX(\\d{4}).*INR\\s([\\d,\\.]*) on ([0-9\\/]*).*at\\s([a-zA-Z0-9\\s]*\\.?)\\sis.*";
     private final static String spendingRegex = ".*" + "[xX]{2}(\\d{4})" + " for " + Constants.RegexConstants.Money + " on " + Constants.RegexConstants.DateWithNumber + ".* at " + Constants.RegexConstants.Merchant + "[ ]*is [Aa]pproved.*";
     private final static String reminderRegex = ".*statement generated.*" + Constants.RegexConstants.Card + " total.*" + Constants.RegexConstants.Money + " &.*" + Constants.RegexConstants.DateWithName + "\\..*";
-    private final static String billingRegex = ".*statement.*" + Constants.RegexConstants.Card + ".* due " + "(\\d{2}-[A-Z]{3}) will.*" + "is " + Constants.RegexConstants.Money + ".*";
+    private final static String billingRegex = ".*statement.*" + Constants.RegexConstants.Card + ".* due " + "(\\d{2}-[A-Z]{3}) will.*" + "is " + Constants.RegexConstants.Money + ".*and.*";
+
 
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
         Pattern spendPattern = Pattern.compile(spendingRegex);

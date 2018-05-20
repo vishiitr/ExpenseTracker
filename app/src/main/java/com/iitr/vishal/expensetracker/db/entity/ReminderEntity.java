@@ -37,6 +37,9 @@ public class ReminderEntity {
     @ColumnInfo(name = "bank_id")
     private long bankId;
 
+    @ColumnInfo(name="reminderSet")
+    private boolean reminderSet;
+
     @Ignore
     public String bankName;
 
@@ -71,6 +74,10 @@ public class ReminderEntity {
     public void setBankId(long bankId) {
         this.bankId = bankId;
     }
+
+    public boolean getReminderSet(){return this.reminderSet;}
+
+    public void setReminderSet(boolean reminderSet){this.reminderSet = reminderSet;}
 
     /*public String getBankName() {
         return bankName;
