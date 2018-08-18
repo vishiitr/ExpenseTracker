@@ -14,7 +14,10 @@ import android.net.Uri;
 
 import com.iitr.vishal.expensetracker.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -27,13 +30,14 @@ public class NotificationScheduler
     public static final int DAILY_REMINDER_REQUEST_CODE=100;
     public static final String TAG="NotificationScheduler";
 
-    public static void setReminder(Context context,Class<?> cls,int hour, int min)
-    {
+    public static void setReminder(Context context,Class<?> cls,Date lastDateforPayment, String reminderMsg) {
         Calendar calendar = Calendar.getInstance();
 
         Calendar setcalendar = Calendar.getInstance();
-        //setcalendar.set(Calendar.HOUR_OF_DAY, hour);
-        setcalendar.set(Calendar.MINUTE, min);
+        setcalendar.setTime(lastDateforPayment);
+        setcalendar.add(Calendar.DAY_OF_YEAR,-2);
+        setcalendar.set(Calendar.HOUR_OF_DAY, 11);
+        setcalendar.set(Calendar.MINUTE, 0);
         setcalendar.set(Calendar.SECOND, 0);
 
         // cancel already scheduled reminders
@@ -53,6 +57,8 @@ public class NotificationScheduler
 
 
         Intent intent1 = new Intent(context, cls);
+        intent1.putExtra("lastDateforPayment",lastDateforPayment);
+        intent1.putExtra("reminderMsg",reminderMsg);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);

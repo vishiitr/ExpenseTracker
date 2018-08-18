@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.iitr.vishal.expensetracker.MainActivity;
+import com.iitr.vishal.expensetracker.Model.ReminderModel;
+import com.iitr.vishal.expensetracker.db.AppDatabase;
+
+import java.util.List;
 
 /**
  * Created by Jaison on 17/06/17.
@@ -23,8 +27,15 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) {
                 // Set the alarm here.
                 Log.d(TAG, "onReceive: BOOT_COMPLETED");
+
+                AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
+                List<ReminderModel> reminders = appDatabase.reminderDao().getAllReminders();
+                for (ReminderModel reminder : reminders) {
+                    if (reminder.isReminderSet)
+                        NotificationScheduler.setReminder(context, AlarmReceiver.class, reminder.reminderDate, "Total Due: ₹ "+ reminder.amount + " on " + reminder.bankName.replace("-"," Credit Card t"));
+                }
                 LocalData localData = new LocalData(context);
-                NotificationScheduler.setReminder(context, AlarmReceiver.class, localData.get_hour(), localData.get_min());
+                //NotificationScheduler.setReminder(context, AlarmReceiver.class, localData.get_hour(), localData.get_min());
                 return;
             }
         }
@@ -33,7 +44,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         //Trigger the notification
         NotificationScheduler.showNotification(context, MainActivity.class,
-                "You have 5 unwatched videos", "Watch them now?");
+                "Bill Reminder", intent.getStringExtra("reminderMsg"));
 
     }
 }

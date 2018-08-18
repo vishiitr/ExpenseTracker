@@ -9,7 +9,7 @@ import java.util.Date;
 public class TranscationModel {
     public int  smsId;
     public String bankName;
-    public   float spentAmount;
+    public float spentAmount;
     public  String spendingCard;
     public Date spentDate;
     public String spentAt;

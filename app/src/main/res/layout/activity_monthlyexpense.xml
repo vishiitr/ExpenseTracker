@@ -5,7 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.iitr.vishal.expensetracker.MonthlyexpenseActivity"
-    android:id="@+id/monthlyExpenseReport">
+    android:id="@+id/monthlyExpenseReport"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/monthName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        />
+
+    <View android:background="#fff" android:layout_width="match_parent" android:layout_height="2px"/>
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/horchart"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true">
+
+    </com.github.mikephil.charting.charts.HorizontalBarChart>
 
     <fragment
         android:layout_weight="1"
@@ -13,6 +34,7 @@
         android:name="com.iitr.vishal.expensetracker.ExpenseFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:layout_margin="7dp"
         />
 </LinearLayout>

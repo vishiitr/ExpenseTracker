@@ -8,6 +8,8 @@ import android.arch.persistence.room.Update;
 
 
 import com.iitr.vishal.expensetracker.Model.MonthlyExpenseModel;
+import com.iitr.vishal.expensetracker.Model.MonthlyTopModel;
+import com.iitr.vishal.expensetracker.Model.TranscationModel;
 import com.iitr.vishal.expensetracker.db.entity.TransactionEntity;
 
 import java.util.List;
@@ -46,4 +48,8 @@ public interface TransactionDao {
             "       from Transactions group by strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') order by spent_date desc limit :range")
     List<MonthlyExpenseModel> getMonthlyExpenditure(int range);
 
+    @Query("SELECT SUM(amount) as spentAmount, \n" +
+            "       spent_at as spentAt from Transactions \n" +
+            "       where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName  group by spent_at order by spentAmount desc limit 5")
+    List<MonthlyTopModel> getMonthlyTopExpenditure(String monthName);
 }

@@ -99,6 +99,10 @@ public class ExpenseChartTask extends AsyncTask<Integer, Void, List<MonthlyExpen
             xAxis.setTextColor(Color.WHITE);
             xAxis.setTextSize(12);
             xAxis.setLabelsToSkip(0);
+
+            barChart.getAxisRight().setAxisMinValue(0);
+            barChart.getAxisLeft().setAxisMinValue(0);
+
             if(range>6)
             {
                 xAxis.setLabelRotationAngle(-45);
@@ -107,7 +111,8 @@ public class ExpenseChartTask extends AsyncTask<Integer, Void, List<MonthlyExpen
             else
             {
                 xAxis.setLabelRotationAngle(0);
-                barChart.setExtraBottomOffset(-18f);
+                barChart.setExtraBottomOffset(-15f);
+                barChart.setExtraTopOffset(28f);
             }
 
             barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
