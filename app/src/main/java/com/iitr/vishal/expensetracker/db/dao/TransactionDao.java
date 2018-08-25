@@ -50,6 +50,6 @@ public interface TransactionDao {
 
     @Query("SELECT SUM(amount) as spentAmount, \n" +
             "       spent_at as spentAt from Transactions \n" +
-            "       where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName  group by spent_at order by spentAmount desc limit 5")
+            "       where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName  group by trim(spent_at) order by spentAmount desc limit 5")
     List<MonthlyTopModel> getMonthlyTopExpenditure(String monthName);
 }

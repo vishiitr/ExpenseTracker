@@ -24,13 +24,31 @@
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed|snap">
 
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barchart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 app:layout_collapseMode="parallax">
-
+                <TextView
+                    android:id="@+id/monthName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="15dp"
+                    android:gravity="center"
+                    android:text="Aug'18"
+                    android:paddingTop="5dp"/>
+                <TextView
+                    android:id="@+id/expenseAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="25dp"
+                    android:gravity="center"
+                    android:text="$20,110"
+                    android:paddingTop="25dp"/>
             </com.github.mikephil.charting.charts.BarChart>
 
             <android.support.v7.widget.Toolbar
