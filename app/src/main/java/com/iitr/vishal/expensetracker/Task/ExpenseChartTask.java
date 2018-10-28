@@ -19,6 +19,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.iitr.vishal.expensetracker.Common.BarChartCustomRenderer;
 import com.iitr.vishal.expensetracker.Common.Formatter;
 import com.iitr.vishal.expensetracker.Common.MoneyFormatter;
 import com.iitr.vishal.expensetracker.MainActivity;
@@ -89,15 +90,13 @@ public class ExpenseChartTask extends AsyncTask<Integer, Void, List<MonthlyExpen
         mChart.animateY(1000);
         mChart.getLegend().setEnabled(false);
         mChart.setExtraTopOffset(80f);
+        BarChartCustomRenderer customRenderer = new BarChartCustomRenderer(mChart, mChart.getAnimator(), mChart.getViewPortHandler());
+        mChart.setRenderer(customRenderer);
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 MonthlyExpenseModel lastMonth = monthlyExpenses.get((int) e.getX());
-                TextView monthNameView = (TextView) activityReference.get().findViewById(R.id.monthName);
-                monthNameView.setText(Formatter.monthFormatter(lastMonth.getMonth_year()));
-                TextView expenseView = (TextView) activityReference.get().findViewById(R.id.expenseAmount);
-                expenseView.setText("₹" + String.format("%,.0f", (double)lastMonth.getExpenditure()));
-
+                SetTextViews(lastMonth);
 
                 String value = labels[(int) e.getX()];
                 Intent intent = new Intent(activityReference.get(), MonthlyexpenseActivity.class);
@@ -154,7 +153,9 @@ public class ExpenseChartTask extends AsyncTask<Integer, Void, List<MonthlyExpen
         rightAxis.setEnabled(false);
 
         setData(mChart);
-        mChart.highlightValue(monthlyExpenses.size()-1,0,false);
+        //mChart.highlightValue(monthlyExpenses.size()-1,0,false);
+        MonthlyExpenseModel lastMonth = monthlyExpenses.get(monthlyExpenses.size()-1);
+        SetTextViews(lastMonth);
     }
 
     private void setData(BarChart mChart) {
@@ -169,7 +170,7 @@ public class ExpenseChartTask extends AsyncTask<Integer, Void, List<MonthlyExpen
 
         int[] barColors = new int[monthlyExpenses.size()];
         Arrays.fill(barColors,getColorWithAlpha(Color.WHITE,0.2f));
-        //barColors[monthlyExpenses.size()-1] = Color.WHITE;
+        barColors[monthlyExpenses.size()-1] = Color.WHITE;
 
 
         BarDataSet set1 = new BarDataSet(yVals1, "");
@@ -199,6 +200,14 @@ public class ExpenseChartTask extends AsyncTask<Integer, Void, List<MonthlyExpen
         int b = Color.blue(color);
         newColor = Color.argb(alpha, r, g, b);
         return newColor;
+    }
+
+    private void SetTextViews(MonthlyExpenseModel monthlyExpenseModel)
+    {
+        TextView monthNameView = (TextView) activityReference.get().findViewById(R.id.monthName);
+        monthNameView.setText(Formatter.monthFormatter(monthlyExpenseModel.getMonth_year()));
+        TextView expenseView = (TextView) activityReference.get().findViewById(R.id.expenseAmount);
+        expenseView.setText("₹" + String.format("%,.0f", (double)monthlyExpenseModel.getExpenditure()));
     }
 
 }

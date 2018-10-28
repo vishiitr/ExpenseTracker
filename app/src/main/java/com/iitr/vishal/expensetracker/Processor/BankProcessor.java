@@ -11,6 +11,7 @@ import com.iitr.vishal.expensetracker.Processor.Banks.CitiBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.HsbcBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.IciciBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.IndusBankProcessor;
+import com.iitr.vishal.expensetracker.Processor.Banks.SbiBankProcessor;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
 import com.iitr.vishal.expensetracker.db.dao.BankDao;
 import com.iitr.vishal.expensetracker.db.dao.ReminderDao;
@@ -47,6 +48,8 @@ public class BankProcessor {
             bankProcessor = new IciciBankProcessor();
         } else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMEHSBC)) {
             bankProcessor = new HsbcBankProcessor();
+        } else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMESBI)) {
+            bankProcessor = new SbiBankProcessor();
         }
 
         if (bankProcessor != null) {

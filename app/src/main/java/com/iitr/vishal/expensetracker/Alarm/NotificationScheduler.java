@@ -59,9 +59,9 @@ public class NotificationScheduler
         Intent intent1 = new Intent(context, cls);
         intent1.putExtra("lastDateforPayment",lastDateforPayment);
         intent1.putExtra("reminderMsg",reminderMsg);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        am.setExact(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis(), pendingIntent);
 
     }
 
@@ -101,7 +101,8 @@ public class NotificationScheduler
         Notification notification = builder.setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(true)
-                .setSound(alarmSound)
+                .setSound(alarmSound).setTicker(content)
+                .setStyle(new Notification.BigTextStyle().bigText(content))
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentIntent(pendingIntent).build();
 

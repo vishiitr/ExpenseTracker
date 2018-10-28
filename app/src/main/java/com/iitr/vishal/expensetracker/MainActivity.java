@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.facebook.stetho.Stetho;
 import com.github.mikephil.charting.charts.BarChart;
+import com.iitr.vishal.expensetracker.Common.Constants;
 import com.iitr.vishal.expensetracker.Task.ExpenseChartTask;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
 
@@ -23,6 +24,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Stetho.initializeWithDefaults(this);
         setContentView(R.layout.activity_main);

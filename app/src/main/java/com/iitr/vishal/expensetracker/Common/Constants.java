@@ -6,14 +6,18 @@ package com.iitr.vishal.expensetracker.Common;
 
 public class Constants {
     public final static String BANKNAMECITI = "Citi";
+    public final static String BANKNAMESBI = "Sbi";
     public final static String BANKNAMEINDUS = "Indus";
     public final static String BANKNAMEHSBC = "Hsbc";
     public final static String BANKNAMEICICI = "Icici";
+    public final static String BANKNAMESC = "SC";
 
     public final static String BANKSMSNAMECITI = "-citi";
+    public final static String BANKSMSNAMESBI = "-";
     public final static String BANKSMSNAMEINDUS = "-indus";
     public final static String BANKSMSNAMEICICI = "-icici";
     public final static String BANKSMSNAMEHSBC = "-hsbc";
+    public final static String BANKSMSNAMESC = "-fromsc";
 
     public static class RegexConstants {
         public final static String Number = "([,\\d]+[\\.\\d{2}]{0,3})";
