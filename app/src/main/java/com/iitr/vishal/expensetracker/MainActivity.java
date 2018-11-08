@@ -5,12 +5,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.facebook.stetho.Stetho;
 import com.github.mikephil.charting.charts.BarChart;
 import com.iitr.vishal.expensetracker.Common.Constants;
+import com.iitr.vishal.expensetracker.Task.BalanceCardTask;
 import com.iitr.vishal.expensetracker.Task.ExpenseChartTask;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
 
@@ -21,6 +23,7 @@ public class MainActivity extends Activity {
     private FloatingActionButton monthFab, yearFab;
     LinearLayout monthLayout, yearLayout;
     private boolean is6Month = true;
+    public RecyclerView balanceCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,9 @@ public class MainActivity extends Activity {
                 ReDrawChart();
             }
         });
+
+        balanceCardView = (RecyclerView)findViewById(R.id.balance_recycler_view);
+        new BalanceCardTask(this).execute();
     }
 
     private void displayList() { // initialize database instance

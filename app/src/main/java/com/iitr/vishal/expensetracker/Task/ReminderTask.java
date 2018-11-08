@@ -3,6 +3,7 @@ package com.iitr.vishal.expensetracker.Task;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.iitr.vishal.expensetracker.Adapter.ExpenseAdapter;
 import com.iitr.vishal.expensetracker.Adapter.ReminderAdapter;
@@ -43,10 +44,21 @@ public class ReminderTask extends AsyncTask<String, Void, ArrayList<ReminderMode
     }
 
     protected void onPostExecute(ArrayList<ReminderModel> notes) {
-        ReminderAdapter expenseAdapter = new ReminderAdapter(activityReference.get().getActivity(), notes);
+
         mLayoutManager = new LinearLayoutManager(activityReference.get().getActivity());
         mRecyclerView = activityReference.get().reminderListView;
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(expenseAdapter);
+        if(notes.size()==0)
+        {
+            mRecyclerView.setVisibility(View.GONE);
+            activityReference.get().emptyTextView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            ReminderAdapter expenseAdapter = new ReminderAdapter(activityReference.get().getActivity(), notes);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(expenseAdapter);
+        }
+
+
     }
 }

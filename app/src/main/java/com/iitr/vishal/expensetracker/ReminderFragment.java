@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.iitr.vishal.expensetracker.R;
 import com.iitr.vishal.expensetracker.Task.RecentExpenseTask;
@@ -19,6 +20,7 @@ import com.iitr.vishal.expensetracker.db.AppDatabase;
 public class ReminderFragment extends Fragment {
 
     public RecyclerView reminderListView;
+    public TextView emptyTextView;
     public AppDatabase appDatabase;
 
     public ReminderFragment() {
@@ -42,6 +44,7 @@ public class ReminderFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         reminderListView = (RecyclerView) getActivity().findViewById(R.id.reminders_list);
+        emptyTextView = (TextView)getActivity().findViewById(R.id.empty_view);
         new ReminderTask(this).execute();
     }
 

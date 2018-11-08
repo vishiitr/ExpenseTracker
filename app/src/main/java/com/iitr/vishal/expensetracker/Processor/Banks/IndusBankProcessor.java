@@ -24,7 +24,6 @@ public class IndusBankProcessor implements BankProcessor.IBankProcessor {
     private final static String reminderRegex = ".*statement generated.*" + Constants.RegexConstants.Card + " total.*" + Constants.RegexConstants.Money + " &.*" + Constants.RegexConstants.DateWithName + "\\..*";
     private final static String billingRegex = ".*statement.*" + Constants.RegexConstants.Card + ".* due " + "(\\d{2}-[A-Z]{3}) will.*" + "is " + Constants.RegexConstants.Money + ".*and.*"+ Constants.RegexConstants.Money + ".*";
 
-
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
         Pattern spendPattern = Pattern.compile(spendingRegex);
         Matcher spendMatcher = spendPattern.matcher(smsModel.getMsg());
