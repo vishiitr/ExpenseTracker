@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,8 +52,24 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
         viewHolder.cardNbr.setText(cardBalanceEntities.get(i).card_nbr);
         viewHolder.month_spent.setText("₹ " + Float.toString(cardBalanceEntities.get(i).monthlySpent));
         viewHolder.cardNbr.setText(cardBalanceEntities.get(i).card_nbr);
-        viewHolder.balance.setText("Balance ₹ " + Float.toString(cardBalanceEntities.get(i).balance));
-        viewHolder.last_updatedDate.setText("Updated on " + simpleDate.format(cardBalanceEntities.get(i).last_transcation_date));
+        if(cardBalanceEntities.get(i).balance==0)
+        {
+            viewHolder.balance.setVisibility(View.GONE);
+            viewHolder.last_updatedDate.setVisibility(View.GONE);
+            viewHolder.horizontal_line.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams
+                    ((int) RelativeLayout.LayoutParams.WRAP_CONTENT, (int) RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+
+            viewHolder.month_spent.setLayoutParams(params);
+            viewHolder.month_spent.setTextSize(18);
+        }
+        else
+        {
+            viewHolder.balance.setText("Balance ₹ " + Float.toString(cardBalanceEntities.get(i).balance));
+            viewHolder.last_updatedDate.setText("Updated on " + simpleDate.format(cardBalanceEntities.get(i).last_transcation_date));
+        }
 
         viewHolder.imgThumbnail.setImageResource(getBankImageId(cardBalanceEntities.get(i).bank_name));
 
@@ -91,6 +108,7 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
         public TextView month_spent;
         public TextView balance;
         public TextView last_updatedDate;
+        public View horizontal_line;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -99,6 +117,7 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
             month_spent = (TextView) itemView.findViewById(R.id.month_spent);
             balance = (TextView) itemView.findViewById(R.id.balance);
             last_updatedDate = (TextView) itemView.findViewById(R.id.last_updated);
+            horizontal_line = (View)itemView.findViewById(R.id.horizontal_line);
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

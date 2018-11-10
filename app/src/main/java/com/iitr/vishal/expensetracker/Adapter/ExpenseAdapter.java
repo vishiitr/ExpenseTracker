@@ -22,7 +22,9 @@ import java.util.Random;
  */
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder> {
-    String[] Colors = {"#64dd17", "#00b8d4", "#304ffe", "#fea904", "#01c653", "#d30100"};
+    //String[] Colors = {"#64dd17", "#00b8d4", "#304ffe", "#fea904", "#01c653", "#d30100"};
+    String[] Colors = {"#e71473", "#ffdb0f", "#b415ff", "#00e863", "#00b8d4", "#304ffe", "#01c653"};
+    int[] ShoppingIcons = {R.drawable.ic_groceries_white,R.drawable.ic_shopping_white};
     private ArrayList<TransactionEntity> listData;
     private LayoutInflater layoutInflater;
     SimpleDateFormat simpleDate = new SimpleDateFormat("dd-MMM-yyyy");
@@ -59,8 +61,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         holder.amountView.setText("₹ " + Float.toString(listData.get(position).getAmount()));
         holder.spentAtView.setText(listData.get(position).getSpentAt());
         holder.dateView.setText(simpleDate.format(listData.get(position).getSpentDate()));
-        holder.shoppingView.setBackgroundColor(Color.parseColor(Colors[rand.nextInt(6)]));
-
+        holder.shoppingView.setImageResource(ShoppingIcons[rand.nextInt(2)]);
+        holder.shoppingView.setBackgroundColor(Color.parseColor(Colors[rand.nextInt(7)]));
     }
 
     @Override
