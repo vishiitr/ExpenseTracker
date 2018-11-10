@@ -14,9 +14,11 @@ import com.iitr.vishal.expensetracker.Processor.Banks.IndusBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.SbiBankProcessor;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
 import com.iitr.vishal.expensetracker.db.dao.BankDao;
+import com.iitr.vishal.expensetracker.db.dao.CardBalanceDao;
 import com.iitr.vishal.expensetracker.db.dao.ReminderDao;
 import com.iitr.vishal.expensetracker.db.dao.TransactionDao;
 import com.iitr.vishal.expensetracker.db.entity.BankEntity;
+import com.iitr.vishal.expensetracker.db.entity.CardBalanceEntity;
 import com.iitr.vishal.expensetracker.db.entity.ReminderEntity;
 import com.iitr.vishal.expensetracker.db.entity.TransactionEntity;
 
@@ -57,9 +59,13 @@ public class BankProcessor {
             if (transcationModel != null) {
                 bankId = saveBank(transcationModel.bankName, transcationModel.spendingCard);
                 if (transcationModel.spentAt != null && !transcationModel.spentAt.isEmpty())//it means its a transcation sms
+                {
                     saveTranscation(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, transcationModel.spentAt, bankId);
+                    saveOrUpdateBalance(transcationModel.availableBalance, transcationModel.spentDate, bankId);
+                }
                 else
                     saveReminder(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, bankId);
+
             }
         }
     }
@@ -85,5 +91,13 @@ public class BankProcessor {
     public void saveReminder(long id, float spentAmount, Date spentDate, long bankId) {
         ReminderDao reminderDao = AppDatabase.getAppDatabase(context).reminderDao();
         reminderDao.insert(new ReminderEntity(id, spentAmount, spentDate, bankId));
+    }
+
+    public void saveOrUpdateBalance(float availableAmount, Date spentDate, long bankId) {
+        CardBalanceDao cardBalanceDao = AppDatabase.getAppDatabase(context).cardBalanceDao();
+        if (cardBalanceDao.getBalanceByBankCardId(bankId).size() == 0)
+            cardBalanceDao.insert(new CardBalanceEntity(bankId, availableAmount, spentDate));
+        else
+            cardBalanceDao.updateReminderAlarmStatus(availableAmount, spentDate, bankId);
     }
 }

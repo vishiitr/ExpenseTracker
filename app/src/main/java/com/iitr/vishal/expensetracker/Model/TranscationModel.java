@@ -13,4 +13,5 @@ public class TranscationModel {
     public  String spendingCard;
     public Date spentDate;
     public String spentAt;
+    public float availableBalance;
 }

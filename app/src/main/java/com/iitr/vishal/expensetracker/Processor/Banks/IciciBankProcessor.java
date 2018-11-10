@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class IciciBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = ".*INR\\s([\\d,\\.]+).*xxx(\\d+).*at\\s([a-zA-Z0-9\\s\\.]*)\\son\\s(.{9,11})\\..*";
-    private static final String spendingRegex = ".*" + Constants.RegexConstants.Money + " using .*" + Constants.RegexConstants.Card + ".* at " + Constants.RegexConstants.Merchant + " on " + Constants.RegexConstants.DateWithName + ".*";
+    private static final String spendingRegex = ".*" + Constants.RegexConstants.Money + " using .*" + Constants.RegexConstants.Card + ".* at " + Constants.RegexConstants.Merchant + " on " + Constants.RegexConstants.DateWithName + ".*Avbl.*" +Constants.RegexConstants.Money + ".*";
     private final static String billingRegex = ".*stmt for.*" + "[xX]{2}(\\d{4})" + ".* of " + Constants.RegexConstants.Money +" or.*" + ".*by " + Constants.RegexConstants.DateWithName + "\\.";
 
     @Override
@@ -36,6 +36,7 @@ public class IciciBankProcessor implements BankProcessor.IBankProcessor {
             String spendingCard = m.group(5);
             String spentDate = m.group(7);
             String spentAt = m.group(6);
+            String availableBalanace = Formatter.nullToEmptyString(m.group(11));
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
@@ -44,6 +45,7 @@ public class IciciBankProcessor implements BankProcessor.IBankProcessor {
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMEICICI;
             transcationModel.spentDate = convertToDate(spentDate);
+            transcationModel.availableBalance = Float.parseFloat(availableBalanace.replaceAll(",", ""));
             return transcationModel;
         } else if (billingMatcher.matches()) {
             String amount = Formatter.nullToEmptyString(billingMatcher.group(3)) + Formatter.nullToEmptyString(billingMatcher.group(4)) + Formatter.nullToEmptyString(billingMatcher.group(5));

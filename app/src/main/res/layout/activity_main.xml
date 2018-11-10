@@ -81,7 +81,7 @@
                 android:name="com.iitr.vishal.expensetracker.ExpenseFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="7dp"
+                android:layout_marginTop="7dp"
                 android:layout_weight="1" />
 
             <fragment
@@ -89,15 +89,34 @@
                 android:name="com.iitr.vishal.expensetracker.ReminderFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="7dp"
+                android:layout_marginTop="7dp"
                 android:layout_weight="1" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:background="@android:color/white"
+                android:elevation="2dp">
+                <TextView
+                    android:id="@+id/static_credit_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="Credit Cards"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="26dp"
+                    android:textSize="15dp"/>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/balance_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="7dp"
+                android:layout_below="@+id/static_credit_card"
+                android:layout_marginTop="-2dp"
+                android:layout_marginBottom="7dp"
+                android:paddingLeft="10dp"
                 android:layout_weight="1"/>
-
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

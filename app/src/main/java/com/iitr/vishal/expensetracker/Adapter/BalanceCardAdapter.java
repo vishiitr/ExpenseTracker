@@ -10,10 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iitr.vishal.expensetracker.Common.Constants;
 import com.iitr.vishal.expensetracker.MainActivity;
+import com.iitr.vishal.expensetracker.Model.CardBalanceModel;
 import com.iitr.vishal.expensetracker.R;
+import com.iitr.vishal.expensetracker.db.entity.CardBalanceEntity;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Divya on 28-10-2018.
@@ -21,15 +28,14 @@ import java.util.ArrayList;
 
 public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.ViewHolder> {
 
-    ArrayList<String> alName;
-    ArrayList<Integer> alImage;
+    List<CardBalanceModel> cardBalanceEntities;
     Context context;
+    SimpleDateFormat simpleDate = new SimpleDateFormat("dd-MMM-yyyy");
 
-    public BalanceCardAdapter(Context context, ArrayList<String> alName) {
+    public BalanceCardAdapter(Context context, List<CardBalanceModel> alName) {
         super();
         this.context = context;
-        this.alName = alName;
-        this.alImage = new ArrayList<Integer>();
+        this.cardBalanceEntities = alName;
     }
 
     @Override
@@ -42,26 +48,58 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.tvSpecies.setText(alName.get(i));
-        //viewHolder.imgThumbnail.setImageResource(alImage.get(i));
+        viewHolder.cardNbr.setText(cardBalanceEntities.get(i).card_nbr);
+        viewHolder.month_spent.setText("₹ " + Float.toString(cardBalanceEntities.get(i).monthlySpent));
+        viewHolder.cardNbr.setText(cardBalanceEntities.get(i).card_nbr);
+        viewHolder.balance.setText("Balance ₹ " + Float.toString(cardBalanceEntities.get(i).balance));
+        viewHolder.last_updatedDate.setText("Updated on " + simpleDate.format(cardBalanceEntities.get(i).last_transcation_date));
+
+        viewHolder.imgThumbnail.setImageResource(getBankImageId(cardBalanceEntities.get(i).bank_name));
 
 
     }
 
     @Override
     public int getItemCount() {
-        return alName.size();
+        return cardBalanceEntities.size();
+    }
+
+    private int getBankImageId(String bankName) {
+        switch (bankName) {
+            case Constants.BANKNAMECITI:
+                return R.drawable.bank_logo_citi;
+            case Constants.BANKNAMEHSBC:
+                return R.drawable.bank_logo_hsbc;
+            case Constants.BANKNAMEICICI:
+                return R.drawable.bank_logo_icici;
+            case Constants.BANKNAMEINDUS:
+                return R.drawable.bank_logo_indusind;
+            case Constants.BANKNAMESBI:
+                return R.drawable.bank_logo_sbi;
+            case Constants.BANKNAMESC:
+                return R.drawable.bank_logo_sc;
+            default:
+                return R.drawable.bank_logo_sc;
+
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public ImageView imgThumbnail;
-        public TextView tvSpecies;
+        public TextView cardNbr;
+        public TextView month_spent;
+        public TextView balance;
+        public TextView last_updatedDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imgThumbnail = (ImageView) itemView.findViewById(R.id.img_thumbnail);
-            tvSpecies = (TextView) itemView.findViewById(R.id.tv_species);
+            cardNbr = (TextView) itemView.findViewById(R.id.cardNbr);
+            month_spent = (TextView) itemView.findViewById(R.id.month_spent);
+            balance = (TextView) itemView.findViewById(R.id.balance);
+            last_updatedDate = (TextView) itemView.findViewById(R.id.last_updated);
+
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

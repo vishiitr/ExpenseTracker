@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class CitiBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = "(Rs\\.|Rs\\s|INR\\s)?([\\d,\\.]*).*spent.*XXX(\\d+)\\son\\s(.{9,11})\\sat\\s([a-zA-Z0-9\\s]+\\.?).*";
-    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*";
+    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*available.*" + Constants.RegexConstants.Money +"\\.";
     private final static String reminderRegex = "Reminder: .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.DateWithName + ".*=" + Constants.RegexConstants.Money + ".*";
     private final static String billingRegex = "Mini Statement .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.Money +".*Minimum.*" + Constants.RegexConstants.DateWithName +".*Refer.*";
     @Override
@@ -40,6 +40,7 @@ public class CitiBankProcessor implements BankProcessor.IBankProcessor {
             String spendingCard = spendMatcher.group(5);
             String spentDate = spendMatcher.group(6);
             String spentAt = spendMatcher.group(7);
+            float balanceAmount =  Float.parseFloat(Formatter.nullToEmptyString(spendMatcher.group(9)).replaceAll(",", ""));
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
@@ -48,6 +49,7 @@ public class CitiBankProcessor implements BankProcessor.IBankProcessor {
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMECITI;
             transcationModel.spentDate = convertToDate(spentDate);
+            transcationModel.availableBalance = balanceAmount;
             return transcationModel;
         }
         else if(reminderMatcher.matches())

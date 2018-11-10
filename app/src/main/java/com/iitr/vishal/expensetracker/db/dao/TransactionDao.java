@@ -48,6 +48,11 @@ public interface TransactionDao {
             "       from Transactions group by strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') order by spent_date desc limit :range")
     List<MonthlyExpenseModel> getMonthlyExpenditure(int range);
 
+    @Query("Select SUM(amount) as expenditure, bank_id as month_year "+
+                "from Transactions where strftime('%m', spent_date / 1000, 'unixepoch' ,'localtime') =  strftime('%m',date('now')) " +
+            " and strftime('%Y', spent_date / 1000, 'unixepoch' ,'localtime') =  strftime('%Y',date('now')) group by bank_id " )
+    List<MonthlyExpenseModel> getCurrentMonthExpense();
+
     @Query("SELECT SUM(amount) as spentAmount, \n" +
             "       spent_at as spentAt from Transactions \n" +
             "       where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName  group by trim(spent_at) order by spentAmount desc limit 5")

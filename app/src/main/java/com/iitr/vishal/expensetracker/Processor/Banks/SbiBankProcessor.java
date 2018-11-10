@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 
 public class SbiBankProcessor implements BankProcessor.IBankProcessor {
-    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .* ending " + "(\\d{4})" + " at " + Constants.RegexConstants.Merchant + " on " + Constants.RegexConstants.DateWithNumber + ".*";
+    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .* ending " + "(\\d{4})" + " at " + Constants.RegexConstants.Merchant + " on " + Constants.RegexConstants.DateWithNumber + ".*Credit.*" + Constants.RegexConstants.Money+"\\.";
     private final static String reminderRegex = "Dear .*" + Constants.RegexConstants.Money + ".*" + "XXX(\\d{4}).*" + Constants.RegexConstants.DateWithName + ".*";
     private final static String billingRegex = "Mini Statement .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.Money + ".*Minimum.*" + Constants.RegexConstants.DateWithName + ".*Refer.*";
 
@@ -39,6 +39,7 @@ public class SbiBankProcessor implements BankProcessor.IBankProcessor {
             String spendingCard = spendMatcher.group(5);
             String spentDate = spendMatcher.group(7);
             String spentAt = spendMatcher.group(6);
+            float balanceAmount =  Float.parseFloat(Formatter.nullToEmptyString(spendMatcher.group(9)).replaceAll(",", ""));
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
@@ -47,6 +48,7 @@ public class SbiBankProcessor implements BankProcessor.IBankProcessor {
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMESBI;
             transcationModel.spentDate = convertToDate(spentDate);
+            transcationModel.availableBalance = balanceAmount;
             return transcationModel;
         } else if (reminderMatcher.matches()) {
             String amount = Formatter.nullToEmptyString(reminderMatcher.group(2)) + Formatter.nullToEmptyString(reminderMatcher.group(3)) + Formatter.nullToEmptyString(reminderMatcher.group(4));
