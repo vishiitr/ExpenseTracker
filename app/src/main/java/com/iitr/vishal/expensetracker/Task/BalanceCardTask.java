@@ -55,7 +55,7 @@ public class BalanceCardTask extends AsyncTask<String, Void, List<CardBalanceMod
     }
 
     protected void onPostExecute(List<CardBalanceModel> notes) {
-        BalanceCardAdapter balanceCardAdapter = new BalanceCardAdapter(activityReference.get().getApplicationContext(), notes);
+        BalanceCardAdapter balanceCardAdapter = new BalanceCardAdapter(activityReference.get(), notes);
         mLayoutManager = new LinearLayoutManager(activityReference.get().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView = activityReference.get().balanceCardView;
         mRecyclerView.setLayoutManager(mLayoutManager);

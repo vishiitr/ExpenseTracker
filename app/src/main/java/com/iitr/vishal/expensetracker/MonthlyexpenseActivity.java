@@ -39,6 +39,8 @@ public class MonthlyexpenseActivity extends Activity {
         monthText.setText(monthName.split("\'")[0]);
         monthText.setBackgroundColor(Color.rgb(170, 32, 108));
         monthText.setTextColor(Color.WHITE);
+
+        this.getWindow().setStatusBarColor(getResources().getColor(R.color.horizontalChartBackGround));
     }
 
 

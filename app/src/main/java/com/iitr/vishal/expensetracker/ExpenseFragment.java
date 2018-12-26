@@ -39,7 +39,8 @@ public class ExpenseFragment extends Fragment {
 
         monthsListView = (RecyclerView) getActivity().findViewById(R.id.months_list);
         String monthName = getArguments().getString("monthName");
-        new RecentExpenseTask(this).execute(monthName);
+        long bank_id = getArguments().getLong("bank_id",-1);
+        new RecentExpenseTask(this).execute(monthName, Long.toString(bank_id));
     }
 
 }

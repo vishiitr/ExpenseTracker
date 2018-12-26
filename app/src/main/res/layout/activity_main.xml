@@ -127,6 +127,7 @@
         android:layout_height="wrap_content"
         app:layout_anchor="@id/appBarLayout"
         app:layout_anchorGravity="top|right|end"
+        app:backgroundTint="#4a8fe2"
         />
 
     <LinearLayout

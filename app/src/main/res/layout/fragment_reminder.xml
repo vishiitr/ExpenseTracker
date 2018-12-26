@@ -13,7 +13,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:text="Current Reminders"
+        android:text="Reminders"
         android:textColor="#808080"
         android:textSize="13sp"
         android:fontFamily="sans-serif"/>
@@ -26,18 +26,30 @@
         android:layout_below="@+id/staticText"
         android:scrollbars="vertical">
     </android.support.v7.widget.RecyclerView>
-    <TextView
+    <RelativeLayout
         android:id="@+id/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="left"
-        android:visibility="gone"
-        android:textSize="17sp"
         android:layout_below="@+id/staticText"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="15dp"
-        android:textColor="#ff8759"
-        android:text="No Billing Pending. Enjoy! :)" />
+        android:layout_width="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/no_reminder_icon"
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/no_reminder_icon"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:textColor="#888"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/no_reminder_icon"
+            android:text="Yay! No pending bills" />
+    </RelativeLayout>
+
 
 </RelativeLayout>

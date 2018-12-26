@@ -1,7 +1,9 @@
 package com.iitr.vishal.expensetracker.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iitr.vishal.expensetracker.CardExpenseActivity;
 import com.iitr.vishal.expensetracker.Common.Constants;
 import com.iitr.vishal.expensetracker.MainActivity;
 import com.iitr.vishal.expensetracker.Model.CardBalanceModel;
+import com.iitr.vishal.expensetracker.MonthlyexpenseActivity;
 import com.iitr.vishal.expensetracker.R;
 import com.iitr.vishal.expensetracker.db.entity.CardBalanceEntity;
 
@@ -30,10 +34,10 @@ import java.util.List;
 public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.ViewHolder> {
 
     List<CardBalanceModel> cardBalanceEntities;
-    Context context;
+    static Activity context;
     SimpleDateFormat simpleDate = new SimpleDateFormat("dd-MMM-yyyy");
 
-    public BalanceCardAdapter(Context context, List<CardBalanceModel> alName) {
+    public BalanceCardAdapter(Activity  context, List<CardBalanceModel> alName) {
         super();
         this.context = context;
         this.cardBalanceEntities = alName;
@@ -52,6 +56,8 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
         viewHolder.cardNbr.setText(cardBalanceEntities.get(i).card_nbr);
         viewHolder.month_spent.setText("₹ " + Float.toString(cardBalanceEntities.get(i).monthlySpent));
         viewHolder.cardNbr.setText(cardBalanceEntities.get(i).card_nbr);
+        viewHolder.bank_id = cardBalanceEntities.get(i).bank_id;
+        viewHolder.bank_name = cardBalanceEntities.get(i).bank_name + " - xxxx" + cardBalanceEntities.get(i).card_nbr;
         if(cardBalanceEntities.get(i).balance==0)
         {
             viewHolder.balance.setVisibility(View.GONE);
@@ -67,6 +73,17 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
         }
         else
         {
+            viewHolder.balance.setVisibility(View.VISIBLE);
+            viewHolder.last_updatedDate.setVisibility(View.VISIBLE);
+            viewHolder.horizontal_line.setVisibility(View.VISIBLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams
+                    ((int) RelativeLayout.LayoutParams.WRAP_CONTENT, (int) RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            params.setMargins(0,15,0,9);
+            viewHolder.month_spent.setLayoutParams(params);
+            viewHolder.month_spent.setTextSize(16);
+
             viewHolder.balance.setText("Balance ₹ " + Float.toString(cardBalanceEntities.get(i).balance));
             viewHolder.last_updatedDate.setText("Updated on " + simpleDate.format(cardBalanceEntities.get(i).last_transcation_date));
         }
@@ -109,6 +126,8 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
         public TextView balance;
         public TextView last_updatedDate;
         public View horizontal_line;
+        public long bank_id;
+        public String bank_name;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -126,6 +145,17 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
 
         @Override
         public void onClick(View view) {
+            //Toast.makeText(context,"Hello Javatpoint",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, CardExpenseActivity.class);
+            Bundle bundle = new Bundle();
+
+            //Add your data to bundle
+            bundle.putLong("bank_id", bank_id);
+            bundle.putString("bank_name",bank_name);
+
+            //Add the bundle to the intent
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         }
 
         @Override

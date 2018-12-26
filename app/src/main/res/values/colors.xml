@@ -7,4 +7,7 @@
     <color name="colorLightBlue">#028090</color>
     <color name="iconPink">#ef6394</color>
     <color name="charColor">#028090</color>
+    <color name="appTheme">#4a8fe2</color>
+    <color name="horizontalChartBackGround">#aa206c</color>
+    <color name="cardHorizontalChartBackGround">#1baf69</color>
 </resources>

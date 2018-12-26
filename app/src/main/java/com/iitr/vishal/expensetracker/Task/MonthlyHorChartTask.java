@@ -62,7 +62,7 @@ public class MonthlyHorChartTask extends AsyncTask<String, Void, List<MonthlyTop
         mChart.getDescription().setEnabled(false);
         mChart.setPinchZoom(false);
         mChart.setDrawGridBackground(false);
-        mChart.setBackgroundColor(Color.rgb(170, 32, 108));
+        mChart.setBackgroundColor(activityReference.get().getResources().getColor(R.color.horizontalChartBackGround));
         mChart.setPinchZoom(false);
         mChart.setDoubleTapToZoomEnabled(false);
         mChart.animateY(1000);
@@ -95,6 +95,7 @@ public class MonthlyHorChartTask extends AsyncTask<String, Void, List<MonthlyTop
         rightAxis.setEnabled(false);
         rightAxis.setSpaceTop(15f);
 
+        //mChart.highlightValue(monthlyExpenses.size()-1,0,false);
         setData(mChart, monthlyExpenses);
     }
 

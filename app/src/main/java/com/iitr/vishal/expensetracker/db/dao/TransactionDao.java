@@ -31,8 +31,17 @@ public interface TransactionDao {
     @Query("SELECT * FROM Transactions where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') = '2017-10' order by spent_date desc")
     List<TransactionEntity> getAllTransactions();
 
-    @Query("SELECT * FROM Transactions where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName order by spent_date desc")
-    List<TransactionEntity> getMonthlyTransactions(String monthName);
+    @Query("SELECT * FROM Transactions where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName " +
+            " and (bank_id = :bank_id or :bank_id=='-1' )" +
+            " order by spent_date desc")
+    List<TransactionEntity> getMonthlyTransactions(String monthName, String bank_id);
+
+    @Query("Select SUM(amount) as expenditure, substr(spent_at,0,8) as month_year" +
+            " FROM Transactions where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName " +
+            " and (bank_id = :bank_id or :bank_id=='-1' )" +
+            " group by spent_at order by expenditure desc")
+    List<MonthlyExpenseModel> getMonthlyTransactionsSumByCard(String monthName, String bank_id);
+
 
     @Query("SELECT * FROM Transactions order by Id desc limit 5 ")
     List<TransactionEntity> getRecentTransactions();
@@ -47,6 +56,12 @@ public interface TransactionDao {
             "       strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') as 'month_year' \n" +
             "       from Transactions group by strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') order by spent_date desc limit :range")
     List<MonthlyExpenseModel> getMonthlyExpenditure(int range);
+
+    @Query("SELECT SUM(amount) as expenditure, \n" +
+            "       strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') as 'month_year' \n" +
+            "       from Transactions where bank_id = :bank_id" +
+            " group by strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') order by spent_date desc limit :range")
+    List<MonthlyExpenseModel> getMonthlyExpenditureByCard(int range, String bank_id);
 
     @Query("Select SUM(amount) as expenditure, bank_id as month_year "+
                 "from Transactions where strftime('%m', spent_date / 1000, 'unixepoch' ,'localtime') =  strftime('%m',date('now')) " +

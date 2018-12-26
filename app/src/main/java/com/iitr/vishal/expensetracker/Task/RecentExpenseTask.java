@@ -35,7 +35,7 @@ public class RecentExpenseTask extends AsyncTask<String, Void, ArrayList<Transac
             if (params[0] == "")
                 list = activityReference.get().appDatabase.transactionDao().getRecentTransactions();
             else
-                list = activityReference.get().appDatabase.transactionDao().getMonthlyTransactions(params[0]);
+                list = activityReference.get().appDatabase.transactionDao().getMonthlyTransactions(params[0],params[1]);
             ArrayList<TransactionEntity> array = new ArrayList<>(list.size());
             array.addAll(list);
             return array;
