@@ -54,7 +54,7 @@ public class MonthlyCardAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.layout_monthly_card, null);
         LinearLayout cardChartPieNHor = (LinearLayout) view.findViewById(R.id.cardChartPieNHor);
-        if (position == 1) {
+        if (position == 0) {
             PieChart pieChart = new PieChart(context);
             int pieId = View.generateViewId();
             pieChart.setId(pieId);

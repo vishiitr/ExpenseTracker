@@ -52,7 +52,7 @@ public class CardExpenseActivity extends Activity {
         appDatabase = AppDatabase.getAppDatabase(CardExpenseActivity.this);
         MonthlyCardAdapter viewPagerAdapter = new MonthlyCardAdapter(this, appDatabase, monthName, Long.toString( bank_id));
         viewPager.setAdapter(viewPagerAdapter);
-
+        self.getWindow().setStatusBarColor(getResources().getColor(R.color.horizontalChartBackGround));
         //DisplayChart(monthName, bank_id);
 
         sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
@@ -87,7 +87,7 @@ public class CardExpenseActivity extends Activity {
                 }
                 dots[position].setImageResource(R.drawable.active_dot);
                 LinearLayout cardView = (LinearLayout) viewPager.getParent();
-                if(position == 1) {
+                if(position == 0) {
                     cardView.setBackgroundColor(getResources().getColor(R.color.horizontalChartBackGround));
                     self.getWindow().setStatusBarColor(getResources().getColor(R.color.horizontalChartBackGround));
                 }

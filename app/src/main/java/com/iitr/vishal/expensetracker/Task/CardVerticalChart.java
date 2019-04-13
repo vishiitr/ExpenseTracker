@@ -44,7 +44,7 @@ public class CardVerticalChart extends AsyncTask<String, Void, List<MonthlyExpen
     private List<MonthlyExpenseModel> monthlyExpenses;
     AppDatabase appDatabase;
     BarChart mChart;
-    int range = 6;
+    int range = 12;
 
     public CardVerticalChart(Context context, AppDatabase appDatabase, BarChart barChart) {
         activityReference = new WeakReference<>(context);

@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 
 public class CitiBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = "(Rs\\.|Rs\\s|INR\\s)?([\\d,\\.]*).*spent.*XXX(\\d+)\\son\\s(.{9,11})\\sat\\s([a-zA-Z0-9\\s]+\\.?).*";
-    private final static String spendingRegex = Constants.RegexConstants.Money + " was spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*available.*" + Constants.RegexConstants.Money +"\\.";
+    private final static String spendingRegex = Constants.RegexConstants.Money + ".* spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*available.*" + Constants.RegexConstants.Money +"\\..*";
+    private final static String spendingRegexMarc2019 = Constants.RegexConstants.Money + ".* spent .*" + "(\\d{4})" + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*available.*" + Constants.RegexConstants.Money +"\\..*";
     private final static String reminderRegex = "Reminder: .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.DateWithName + ".*=" + Constants.RegexConstants.Money + ".*";
     private final static String billingRegex = "Mini Statement .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.Money +".*Minimum.*" + Constants.RegexConstants.DateWithName +".*Refer.*";
     @Override
@@ -28,18 +29,39 @@ public class CitiBankProcessor implements BankProcessor.IBankProcessor {
         Pattern spendPattern = Pattern.compile(spendingRegex);
         Matcher spendMatcher = spendPattern.matcher(smsModel.getMsg());
 
+        Pattern spendPatternMar2019 = Pattern.compile(spendingRegexMarc2019);
+        Matcher spendMatcherMar2019 = spendPatternMar2019.matcher(smsModel.getMsg());
+
         Pattern reminderPattern = Pattern.compile(reminderRegex);
         Matcher reminderMatcher = reminderPattern.matcher(smsModel.getMsg());
 
         Pattern billingPattern = Pattern.compile(billingRegex);
         Matcher billingMatcher = billingPattern.matcher(smsModel.getMsg());
 
+        if (spendMatcherMar2019.matches()) {
+            String amount = Formatter.nullToEmptyString(spendMatcherMar2019.group(2)) + Formatter.nullToEmptyString(spendMatcherMar2019.group(3)) + Formatter.nullToEmptyString(spendMatcherMar2019.group(4));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = spendMatcherMar2019.group(5);
+            String spentDate = spendMatcherMar2019.group(6);
+            String spentAt = spendMatcherMar2019.group(7).trim();
+            float balanceAmount =  Float.parseFloat(Formatter.nullToEmptyString(spendMatcherMar2019.group(9)).replaceAll(",", ""));
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAt = spentAt;
+            transcationModel.spentAmount = spentAmount;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMECITI;
+            transcationModel.spentDate = convertToDate(spentDate);
+            transcationModel.availableBalance = balanceAmount;
+            return transcationModel;
+        }
         if (spendMatcher.matches()) {
             String amount = Formatter.nullToEmptyString(spendMatcher.group(2)) + Formatter.nullToEmptyString(spendMatcher.group(3)) + Formatter.nullToEmptyString(spendMatcher.group(4));
             float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
             String spendingCard = spendMatcher.group(5);
             String spentDate = spendMatcher.group(6);
-            String spentAt = spendMatcher.group(7);
+            String spentAt = spendMatcher.group(7).trim();
             float balanceAmount =  Float.parseFloat(Formatter.nullToEmptyString(spendMatcher.group(9)).replaceAll(",", ""));
 
             TranscationModel transcationModel = new TranscationModel();

@@ -42,7 +42,7 @@ public class SCBankProcessor implements BankProcessor.IBankProcessor {
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
-            transcationModel.spentAt = spentAt;
+            transcationModel.spentAt = spentAt.trim();
             transcationModel.spentAmount = spentAmount;
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMESBI;

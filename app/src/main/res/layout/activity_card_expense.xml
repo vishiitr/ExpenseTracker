@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/cardChartContainer"
-        android:background="@color/cardHorizontalChartBackGround" >
+        android:background="@color/horizontalChartBackGround" >
 
         <TextView
             android:id="@+id/bankName_cardNbr"
@@ -36,6 +36,8 @@
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="190dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             />
 
         <LinearLayout
@@ -44,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/viewPager"
             android:gravity="center_vertical|center_horizontal"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal" />
     </LinearLayout>
 

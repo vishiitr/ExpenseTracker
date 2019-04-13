@@ -23,7 +23,7 @@ public class Constants {
         public final static String Number = "([,\\d]+[\\.\\d{2}]{0,3})";
         public final static String Money = "([Rr]s\\.?[ ]?" + Number + "|" + Number + "[ ]?INR|INR[ ]?" + Number + ")";
         public final static String Card = "[xX]{2}(\\d{4})";
-        public final static String Merchant = "([a-zA-Z0-9 -]*)\\.{0,1}";
+        public final static String Merchant = "([a-zA-Z0-9 -\\*]*)\\.{0,1}";
         public final static String DateWithName = "([a-zA-Z\\d\\-]{9,11})";
         public final static String DateWithNumber = "([\\d\\/]+)";
     }

@@ -38,7 +38,7 @@ public class SbiBankProcessor implements BankProcessor.IBankProcessor {
             float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
             String spendingCard = spendMatcher.group(5);
             String spentDate = spendMatcher.group(7);
-            String spentAt = spendMatcher.group(6);
+            String spentAt = spendMatcher.group(6).trim();
             float balanceAmount =  Float.parseFloat(Formatter.nullToEmptyString(spendMatcher.group(9)).replaceAll(",", ""));
 
             TranscationModel transcationModel = new TranscationModel();

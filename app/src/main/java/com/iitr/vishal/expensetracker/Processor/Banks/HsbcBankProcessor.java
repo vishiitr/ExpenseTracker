@@ -37,7 +37,7 @@ private static final String spendingRegex2 = ".*" + Constants.RegexConstants.Car
 
             TranscationModel transcationModel = new TranscationModel();
             transcationModel.spendingCard = spendingCard;
-            transcationModel.spentAt = spentAt;
+            transcationModel.spentAt = spentAt.trim();
             transcationModel.spentAmount = spentAmount;
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMEHSBC;
