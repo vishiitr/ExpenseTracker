@@ -22,7 +22,7 @@ public class IndusBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = ".*XX(\\d{4}).*INR\\s([\\d,\\.]*) on ([0-9\\/]*).*at\\s([a-zA-Z0-9\\s]*\\.?)\\sis.*";
     private final static String spendingRegex = ".*" + "[xX]{2}(\\d{4})" + " for " + Constants.RegexConstants.Money + " on " + Constants.RegexConstants.DateWithNumber + ".* at " + Constants.RegexConstants.Merchant + ".*is [Aa]pproved.*";
     private final static String reminderRegex = ".*Stmt Alert.*" + Constants.RegexConstants.Card + " is.*" + Constants.RegexConstants.Money + " and.*" + Constants.RegexConstants.DateWithName;
-    private final static String billingRegex = ".*e-Stmt.*" + Constants.RegexConstants.Card + ".* due are " + "Constants.RegexConstants.Money.*" + "is " + Constants.RegexConstants.Money + ".*and.*"+ Constants.RegexConstants.Money + ".*";
+    private final static String billingRegex = ".*Stmt Alert.*" + Constants.RegexConstants.Card + " is " + "Constants.RegexConstants.Money.*" + " and.* payable by " + Constants.RegexConstants.DateWithName;
 
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
         Pattern spendPattern = Pattern.compile(spendingRegex);
@@ -96,7 +96,7 @@ public class IndusBankProcessor implements BankProcessor.IBankProcessor {
     }
 
     private Date convertToDate2(String spentDate) {
-        DateFormat sourceFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        DateFormat sourceFormat = new SimpleDateFormat("dd-MMM-yy");
         Date date = null;
         try {
             date = sourceFormat.parse(spentDate);
