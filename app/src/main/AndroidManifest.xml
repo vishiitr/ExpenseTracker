@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -23,13 +24,9 @@
         <activity android:name=".MonthlyexpenseActivity" />
 
         <receiver
-            android:name=".Alarm.AlarmReceiver"
-            android:enabled="true"
-            android:exported="true">
+            android:name="com.iitr.vishal.expensetracker.Alarm.AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 

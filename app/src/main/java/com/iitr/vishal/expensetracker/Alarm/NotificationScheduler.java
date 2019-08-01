@@ -2,6 +2,7 @@ package com.iitr.vishal.expensetracker.Alarm;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 
 import com.iitr.vishal.expensetracker.R;
 
@@ -19,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
 import static android.content.Context.ALARM_SERVICE;
 
 /**
@@ -27,11 +30,13 @@ import static android.content.Context.ALARM_SERVICE;
 
 public class NotificationScheduler
 {
-    public static final int DAILY_REMINDER_REQUEST_CODE=100;
+    public static final int DAILY_REMINDER_REQUEST_CODE=0;
     public static final String TAG="NotificationScheduler";
+    private static final String CHANNEL_ID = "com.singhajit.notificationDemo.channelId";
 
     public static void setReminder(Context context,Class<?> cls,Date lastDateforPayment, String reminderMsg) {
         Calendar calendar = Calendar.getInstance();
+        //calendar.add(Calendar.HOUR,8);
 
         Calendar setcalendar = Calendar.getInstance();
         setcalendar.setTime(lastDateforPayment);
@@ -61,7 +66,7 @@ public class NotificationScheduler
         intent1.putExtra("reminderMsg",reminderMsg);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setExact(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis(), pendingIntent);
+        am.set(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis(), pendingIntent);
 
     }
 
@@ -88,7 +93,7 @@ public class NotificationScheduler
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         Intent notificationIntent = new Intent(context, cls);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(cls);
@@ -106,7 +111,21 @@ public class NotificationScheduler
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentIntent(pendingIntent).build();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(CHANNEL_ID);
+        }
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "NotificationDemo",
+                    IMPORTANCE_DEFAULT
+            );
+            notificationManager.createNotificationChannel(channel);
+        }
+
         notificationManager.notify(DAILY_REMINDER_REQUEST_CODE, notification);
 
     }

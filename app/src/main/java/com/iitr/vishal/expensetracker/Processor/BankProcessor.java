@@ -7,6 +7,7 @@ import com.iitr.vishal.expensetracker.Common.Constants;
 import com.iitr.vishal.expensetracker.Common.Pair;
 import com.iitr.vishal.expensetracker.Model.SmsModel;
 import com.iitr.vishal.expensetracker.Model.TranscationModel;
+import com.iitr.vishal.expensetracker.Processor.Banks.AmexBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.CitiBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.HsbcBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.IciciBankProcessor;
@@ -52,6 +53,9 @@ public class BankProcessor {
             bankProcessor = new HsbcBankProcessor();
         } else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMESBI)) {
             bankProcessor = new SbiBankProcessor();
+        }
+        else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMEAMEX)) {
+            bankProcessor = new AmexBankProcessor();
         }
 
         if (bankProcessor != null) {

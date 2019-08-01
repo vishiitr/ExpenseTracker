@@ -112,6 +112,8 @@ public class BalanceCardAdapter extends RecyclerView.Adapter<BalanceCardAdapter.
                 return R.drawable.bank_logo_sbi;
             case Constants.BANKNAMESC:
                 return R.drawable.bank_logo_sc;
+            case Constants.BANKNAMEAMEX:
+                return R.drawable.bank_logo_amex;
             default:
                 return R.drawable.bank_logo_sc;
 

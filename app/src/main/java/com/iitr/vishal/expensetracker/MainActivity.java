@@ -12,9 +12,11 @@ import android.widget.LinearLayout;
 import com.facebook.stetho.Stetho;
 import com.github.mikephil.charting.charts.BarChart;
 import com.iitr.vishal.expensetracker.Common.Constants;
+import com.iitr.vishal.expensetracker.Common.Logger;
 import com.iitr.vishal.expensetracker.Task.BalanceCardTask;
 import com.iitr.vishal.expensetracker.Task.ExpenseChartTask;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
+import com.iitr.vishal.expensetracker.db.entity.TransactionEntity;
 
 
 public class MainActivity extends Activity {
@@ -46,6 +48,8 @@ public class MainActivity extends Activity {
 
         balanceCardView = (RecyclerView)findViewById(R.id.balance_recycler_view);
         new BalanceCardTask(this).execute();
+
+        //Logger.getInstance(this).info("Test");
     }
 
     private void displayList() { // initialize database instance

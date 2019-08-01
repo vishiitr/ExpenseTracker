@@ -49,6 +49,7 @@ public class BalanceCardTask extends AsyncTask<String, Void, List<CardBalanceMod
                     }
                 }
             }
+
             return cardBalanceModels;
         } else
             return new ArrayList<CardBalanceModel>();

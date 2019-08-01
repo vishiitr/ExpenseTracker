@@ -65,7 +65,7 @@ public interface TransactionDao {
 
     @Query("Select SUM(amount) as expenditure, bank_id as month_year "+
                 "from Transactions where strftime('%m', spent_date / 1000, 'unixepoch' ,'localtime') =  strftime('%m',date('now')) " +
-            " and strftime('%Y', spent_date / 1000, 'unixepoch' ,'localtime') =  strftime('%Y',date('now')) group by bank_id " )
+            " and strftime('%Y', spent_date / 1000, 'unixepoch' ,'localtime') =  strftime('%Y',date('now')) group by bank_id order by Id" )
     List<MonthlyExpenseModel> getCurrentMonthExpense();
 
     @Query("SELECT SUM(amount) as spentAmount, \n" +
