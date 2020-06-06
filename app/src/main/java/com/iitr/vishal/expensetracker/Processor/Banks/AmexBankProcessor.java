@@ -20,12 +20,16 @@ import java.util.regex.Pattern;
 
 public class AmexBankProcessor implements BankProcessor.IBankProcessor {
     private final static String spendingRegex = "A charge.*" + Constants.RegexConstants.Money + ".* initiated .*" + Constants.RegexConstants.CardAmex +  " at " + Constants.RegexConstants.Merchant  + " on " + Constants.RegexConstants.DateWithNumber + ".*";
+    private final static String spendingRegex2 = "Alert: You've spent *" + Constants.RegexConstants.Money + ".* card .*" + Constants.RegexConstants.CardAmex +  " at " + Constants.RegexConstants.Merchant  + " on " + Constants.RegexConstants.DateWithNumber + ".*";
     private final static String reminderRegex = "Reminder: .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.DateWithName + ".*=" + Constants.RegexConstants.Money + ".*";
-    private final static String billingRegex = "Mini Statement .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.Money +".*Minimum.*" + Constants.RegexConstants.DateWithName +".*Refer.*";
+    private final static String billingRegex = "Dear Customer, your statement .* \\*{10}(\\d{5}) .*total payment " + Constants.RegexConstants.Money +" is due by " + Constants.RegexConstants.DateWithNumber +".*";
     @Override
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
         Pattern spendPattern = Pattern.compile(spendingRegex);
         Matcher spendMatcher = spendPattern.matcher(smsModel.getMsg());
+
+        Pattern spendPattern2 = Pattern.compile(spendingRegex2);
+        Matcher spendMatcher2 = spendPattern2.matcher(smsModel.getMsg());
 
         Pattern reminderPattern = Pattern.compile(reminderRegex);
         Matcher reminderMatcher = reminderPattern.matcher(smsModel.getMsg());
@@ -39,6 +43,23 @@ public class AmexBankProcessor implements BankProcessor.IBankProcessor {
             String spendingCard = spendMatcher.group(5);
             String spentDate = spendMatcher.group(7);
             String spentAt = spendMatcher.group(6).trim();
+            //float balanceAmount =  Float.parseFloat(Formatter.nullToEmptyString(spendMatcher.group(9)).replaceAll(",", ""));
+
+            TranscationModel transcationModel = new TranscationModel();
+            transcationModel.spendingCard = spendingCard;
+            transcationModel.spentAt = spentAt;
+            transcationModel.spentAmount = spentAmount;
+            transcationModel.smsId = Integer.parseInt(smsModel.getId());
+            transcationModel.bankName = Constants.BANKNAMEAMEX;
+            transcationModel.spentDate = convertToDate(spentDate);
+            return transcationModel;
+        }
+        else if (spendMatcher2.matches()) {
+            String amount = Formatter.nullToEmptyString(spendMatcher2.group(2)) + Formatter.nullToEmptyString(spendMatcher2.group(3)) + Formatter.nullToEmptyString(spendMatcher2.group(4));
+            float spentAmount = Float.parseFloat(amount.replaceAll(",", ""));
+            String spendingCard = spendMatcher2.group(5);
+            String spentDate = spendMatcher2.group(7);
+            String spentAt = spendMatcher2.group(6).trim();
             //float balanceAmount =  Float.parseFloat(Formatter.nullToEmptyString(spendMatcher.group(9)).replaceAll(",", ""));
 
             TranscationModel transcationModel = new TranscationModel();
@@ -77,7 +98,7 @@ public class AmexBankProcessor implements BankProcessor.IBankProcessor {
             transcationModel.spentAmount = spentAmount;
             transcationModel.smsId = Integer.parseInt(smsModel.getId());
             transcationModel.bankName = Constants.BANKNAMEAMEX;
-            transcationModel.spentDate = convertToDate(spentDate);
+            transcationModel.spentDate = convertToDate2(spentDate);
             return transcationModel;
         }
 
@@ -87,6 +108,17 @@ public class AmexBankProcessor implements BankProcessor.IBankProcessor {
 
     private Date convertToDate(String spentDate) {
         DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        try {
+            date = sourceFormat.parse(spentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    private Date convertToDate2(String spentDate) {
+        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yy");
         Date date = null;
         try {
             date = sourceFormat.parse(spentDate);

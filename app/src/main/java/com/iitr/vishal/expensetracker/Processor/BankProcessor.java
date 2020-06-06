@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.iitr.vishal.expensetracker.Common.Cache;
 import com.iitr.vishal.expensetracker.Common.Constants;
+import com.iitr.vishal.expensetracker.Common.MerchantFormatter;
 import com.iitr.vishal.expensetracker.Common.Pair;
 import com.iitr.vishal.expensetracker.Model.SmsModel;
 import com.iitr.vishal.expensetracker.Model.TranscationModel;
@@ -23,6 +24,8 @@ import com.iitr.vishal.expensetracker.db.entity.CardBalanceEntity;
 import com.iitr.vishal.expensetracker.db.entity.ReminderEntity;
 import com.iitr.vishal.expensetracker.db.entity.TransactionEntity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -89,6 +92,7 @@ public class BankProcessor {
 
     public void saveTranscation(long id, float spentAmount, Date spentDate, String spentAt, long bankId) {
         TransactionDao transactionDao = AppDatabase.getAppDatabase(context).transactionDao();
+        spentAt = MerchantFormatter.getFormattedName(spentAt);
         transactionDao.insert(new TransactionEntity(id, spentAmount, spentAt, spentDate, bankId));
     }
 

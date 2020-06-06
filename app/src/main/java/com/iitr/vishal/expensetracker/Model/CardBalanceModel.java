@@ -13,4 +13,5 @@ public class CardBalanceModel {
     public Date last_transcation_date;
     public float balance;
     public float monthlySpent;
+    public float Id;
 }

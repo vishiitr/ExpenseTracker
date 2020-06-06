@@ -39,7 +39,7 @@ public interface TransactionDao {
     @Query("Select SUM(amount) as expenditure, substr(spent_at,0,8) as month_year" +
             " FROM Transactions where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName " +
             " and (bank_id = :bank_id or :bank_id=='-1' )" +
-            " group by spent_at order by expenditure desc")
+            " group by LOWER(TRIM(spent_at)) order by expenditure desc")
     List<MonthlyExpenseModel> getMonthlyTransactionsSumByCard(String monthName, String bank_id);
 
 
@@ -70,6 +70,12 @@ public interface TransactionDao {
 
     @Query("SELECT SUM(amount) as spentAmount, \n" +
             "       spent_at as spentAt from Transactions \n" +
-            "       where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName  group by trim(spent_at) order by spentAmount desc limit 5")
+            "       where strftime('%Y-%m', spent_date / 1000, 'unixepoch' ,'localtime') like :monthName  group by LOWER(TRIM(spent_at)) order by spentAmount desc limit 5")
     List<MonthlyTopModel> getMonthlyTopExpenditure(String monthName);
+
+    @Query("UPDATE Transactions SET spent_at = TRIM(spent_at)")
+    void Merchant();
+
+    @Query("delete from Transactions  WHERE id = :tid")
+    void deleteTranscation(long tid);
 }

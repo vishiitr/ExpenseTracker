@@ -7,6 +7,7 @@ import android.provider.Telephony;
 
 import com.iitr.vishal.expensetracker.Model.SmsModel;
 import com.iitr.vishal.expensetracker.db.AppDatabase;
+import com.iitr.vishal.expensetracker.db.dao.TransactionDao;
 
 import java.util.Date;
 import java.util.concurrent.Callable;
@@ -75,6 +76,10 @@ public class SmsProcessor {
     }
 
     private long getLastSmsId() {
-        return AppDatabase.getAppDatabase(context).transactionDao().getLastSmsId();
+        TransactionDao transactionDao = AppDatabase.getAppDatabase(context).transactionDao();
+        long lastSmsId = transactionDao.getLastSmsId();
+        //transactionDao.deleteTranscation(lastSmsId);
+        //return AppDatabase.getAppDatabase(context).transactionDao().getLastSmsId();
+        return lastSmsId;
     }
 }

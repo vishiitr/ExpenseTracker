@@ -62,6 +62,7 @@ public class SplashloadingTask extends AsyncTask<String, Integer, Integer> {
 
     private void updateCache() {
         BankDao bankDao = AppDatabase.getAppDatabase((Activity)finishedListener).bankDao();
+        //AppDatabase.getAppDatabase((Activity)finishedListener).transactionDao().Merchant();
         List<BankEntity> bankEntities = bankDao.getAllBanknCard();
         Cache.BanksNCards.clear();
         for (BankEntity item : bankEntities) {

@@ -43,6 +43,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         try
                         {
                             NotificationScheduler.setReminder(context, AlarmReceiver.class, reminder.reminderDate, "Total Due: ₹ "+ reminder.amount + " on " + reminder.bankName.replace("-"," Credit Card t"));
+                            //Logger.getInstance(context).info(reminder.reminderDate.toString());
                         }
                         catch (Exception ex)
                         {

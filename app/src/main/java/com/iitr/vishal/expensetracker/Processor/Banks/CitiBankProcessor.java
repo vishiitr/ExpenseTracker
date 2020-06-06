@@ -22,8 +22,8 @@ public class CitiBankProcessor implements BankProcessor.IBankProcessor {
     //private final String spendingRegex = "(Rs\\.|Rs\\s|INR\\s)?([\\d,\\.]*).*spent.*XXX(\\d+)\\son\\s(.{9,11})\\sat\\s([a-zA-Z0-9\\s]+\\.?).*";
     private final static String spendingRegex = Constants.RegexConstants.Money + ".* spent .*" + Constants.RegexConstants.Card + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*available.*" + Constants.RegexConstants.Money +"\\..*";
     private final static String spendingRegexMarc2019 = Constants.RegexConstants.Money + ".* spent .*" + "(\\d{4})" + " on " + Constants.RegexConstants.DateWithName + " at " + Constants.RegexConstants.Merchant + ".*available.*" + Constants.RegexConstants.Money +"\\..*";
-    private final static String reminderRegex = "Reminder: .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.DateWithName + ".*=" + Constants.RegexConstants.Money + ".*";
-    private final static String billingRegex = "Mini Statement .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.Money +".*Minimum.*" + Constants.RegexConstants.DateWithName +".*Refer.*";
+    private final static String reminderRegex = "Reminder: .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.DateWithName + ".*=" + Constants.RegexConstants.Money + ",Minimum.*";
+    private final static String billingRegex = "Mini Statement .*\\*\\*\\*(\\d{4}).*" + Constants.RegexConstants.Money +".*Minimum.*" + Constants.RegexConstants.DateWithName +".*details.*";
     @Override
     public TranscationModel onSaveTranscation(SmsModel smsModel) {
         Pattern spendPattern = Pattern.compile(spendingRegex);
