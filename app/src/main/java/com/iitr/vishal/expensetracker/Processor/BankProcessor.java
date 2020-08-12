@@ -10,6 +10,7 @@ import com.iitr.vishal.expensetracker.Model.SmsModel;
 import com.iitr.vishal.expensetracker.Model.TranscationModel;
 import com.iitr.vishal.expensetracker.Processor.Banks.AmexBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.CitiBankProcessor;
+import com.iitr.vishal.expensetracker.Processor.Banks.GenericBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.HsbcBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.IciciBankProcessor;
 import com.iitr.vishal.expensetracker.Processor.Banks.IndusBankProcessor;
@@ -47,18 +48,18 @@ public class BankProcessor {
         IBankProcessor bankProcessor = null;
         long bankId = 0;
         if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMECITI)) {
-            bankProcessor = new CitiBankProcessor();
+            bankProcessor = new GenericBankProcessor(Constants.BANKNAMECITI);
         } else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMEINDUS)) {
-            bankProcessor = new IndusBankProcessor();
+            bankProcessor = new GenericBankProcessor(Constants.BANKNAMEINDUS);
         } else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMEICICI)) {
-            bankProcessor = new IciciBankProcessor();
+            bankProcessor = new GenericBankProcessor(Constants.BANKNAMEICICI);
         } else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMEHSBC)) {
-            bankProcessor = new HsbcBankProcessor();
+            bankProcessor = new GenericBankProcessor(Constants.BANKNAMEHSBC);
         } else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMESBI)) {
-            bankProcessor = new SbiBankProcessor();
+            bankProcessor = new GenericBankProcessor(Constants.BANKNAMESBI);
         }
         else if (smsModel.getAddress().toLowerCase().contains(Constants.BANKSMSNAMEAMEX)) {
-            bankProcessor = new AmexBankProcessor();
+            bankProcessor = new GenericBankProcessor(Constants.BANKNAMEAMEX);
         }
 
         if (bankProcessor != null) {
@@ -70,8 +71,8 @@ public class BankProcessor {
                     saveTranscation(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, transcationModel.spentAt, bankId);
                     saveOrUpdateBalance(transcationModel.availableBalance, transcationModel.spentDate, bankId);
                 }
-                else
-                    saveReminder(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, bankId);
+                //else
+                //    saveReminder(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, bankId);
 
             }
         }
@@ -97,8 +98,11 @@ public class BankProcessor {
     }
 
     public void saveReminder(long id, float spentAmount, Date spentDate, long bankId) {
-        ReminderDao reminderDao = AppDatabase.getAppDatabase(context).reminderDao();
-        reminderDao.insert(new ReminderEntity(id, spentAmount, spentDate, bankId));
+        if(spentDate!=null)
+        {
+            ReminderDao reminderDao = AppDatabase.getAppDatabase(context).reminderDao();
+            reminderDao.insert(new ReminderEntity(id, spentAmount, spentDate, bankId));
+        }
     }
 
     public void saveOrUpdateBalance(float availableAmount, Date spentDate, long bankId) {
