@@ -71,8 +71,8 @@ public class BankProcessor {
                     saveTranscation(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, transcationModel.spentAt, bankId);
                     saveOrUpdateBalance(transcationModel.availableBalance, transcationModel.spentDate, bankId);
                 }
-                //else
-                //    saveReminder(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, bankId);
+                else
+                    saveReminder(transcationModel.smsId, transcationModel.spentAmount, transcationModel.spentDate, bankId);
 
             }
         }
