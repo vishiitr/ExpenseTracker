@@ -75,7 +75,7 @@ public class GenericBankProcessor implements BankProcessor.IBankProcessor {
 
         //Date
         m = date.matcher(smsModel.getMsg());
-        if(m.find()) {
+        while(m.find()) {
             String date = m.group(1);
             Date convertedDate = convertToDate(date);
             if(convertedDate == null)
@@ -85,8 +85,13 @@ public class GenericBankProcessor implements BankProcessor.IBankProcessor {
             transcationModel.spentDate = convertedDate;
             matching++;
         }
-        if(matching==4 || (transcationModel.spentAt == null && matching == 3))
+        if(matching==4 )
             return transcationModel;
+        if(transcationModel.spentAt == null && matching == 3)
+        {
+            transcationModel.spentAmount = Math.max(transcationModel.spentAmount, transcationModel.availableBalance);
+            return transcationModel;
+        }
         else
             return null;
     }

@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "835d1e7b65f3b6c98983e1aea24b2943",
+    "version": 3,
+    "identityHash": "c6a227b15a9824a1ca2f050393f2d5d0",
     "entities": [
       {
         "tableName": "BanksNCard",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "Transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER NOT NULL, `amount` REAL NOT NULL, `spent_at` TEXT, `spent_date` INTEGER, `bank_id` INTEGER NOT NULL, `is_deleted` INTEGER, PRIMARY KEY(`Id`), FOREIGN KEY(`bank_id`) REFERENCES `BanksNCard`(`Id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER NOT NULL, `amount` REAL NOT NULL, `spent_at` TEXT, `spent_date` INTEGER, `bank_id` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, PRIMARY KEY(`Id`), FOREIGN KEY(`bank_id`) REFERENCES `BanksNCard`(`Id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "Id",
@@ -74,7 +74,7 @@
             "fieldPath": "isDeleted",
             "columnName": "is_deleted",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -229,7 +229,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"835d1e7b65f3b6c98983e1aea24b2943\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c6a227b15a9824a1ca2f050393f2d5d0\")"
     ]
   }
 }

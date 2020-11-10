@@ -36,6 +36,9 @@ public class TransactionEntity {
     @ColumnInfo(name = "bank_id")
     private long bankId;
 
+    @ColumnInfo(name = "is_deleted")@NonNull
+    private boolean isDeleted;
+
     public long getId() {
         return Id;
     }
@@ -75,6 +78,10 @@ public class TransactionEntity {
     public void setBankId(long bankId) {
         this.bankId = bankId;
     }
+
+    public boolean getIsDeleted() {return isDeleted; }
+
+    public  void  setIsDeleted(boolean isDeleted) {this.isDeleted = isDeleted;}
 
     public TransactionEntity() {
 

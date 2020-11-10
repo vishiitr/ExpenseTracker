@@ -1,76 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    app:dragEdge="right"
+    app:mode="same_level">
 
-    <ImageView
-        android:id="@+id/shoppingIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:padding="0dp"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/shopping_cart_2"
-        android:layout_centerVertical="true"
-        android:background="@color/iconPink"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"/>
-
-    <ImageView
-        android:id="@+id/maskIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/mask_icon"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"/>
-
-    <TextView
-        android:id="@+id/spentAt"
-        android:layout_width="wrap_content"
+    <!-- Your secondary layout here -->
+    <FrameLayout
+        android:id="@+id/delete_layout"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:textColor="#343434"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:layout_toRightOf="@+id/shoppingIcon"/>
+        android:background="#f9f9f9"
+        >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:src="@drawable/delete_icon" />
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_below="@id/spentAt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="15 March 2018"
-        android:textColor="#858585"
-        android:textSize="13sp"
-        android:layout_toRightOf="@+id/shoppingIcon"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <ImageView
+                android:id="@+id/shoppingIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/iconPink"
+                android:padding="0dp"
+                android:src="@drawable/shopping_cart_2" />
+
+            <ImageView
+                android:id="@+id/maskIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/mask_icon" />
+
+            <TextView
+                android:id="@+id/spentAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/shoppingIcon"
+                android:textColor="#343434"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spentAt"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@+id/shoppingIcon"
+                android:text="15 March 2018"
+                android:textColor="#858585"
+                android:textSize="13sp" />
 
 
-    <TextView
-        android:id="@+id/amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/spentAt"
-        android:layout_alignBottom="@+id/spentAt"
-        android:layout_alignParentEnd="true"
-        android:textColor="#343434"
-        android:textSize="17sp"
-        android:layout_marginRight="25dp"
-        android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/spentAt"
+                android:layout_alignBottom="@+id/spentAt"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="25dp"
+                android:textColor="#343434"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                />
 
-    <View
-        android:id="@+id/horizontal_line"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_toRightOf="@+id/shoppingIcon"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="25dp"
-        android:layout_alignParentBottom="true"
-        android:background="#eee"/>
-</RelativeLayout>
+            <View
+                android:id="@+id/horizontal_line"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+
+                android:background="#eee" />
+
+        </RelativeLayout>
+    </FrameLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
