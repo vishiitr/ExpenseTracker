@@ -64,7 +64,7 @@ public class BankProcessor {
 
         if (bankProcessor != null) {
             TranscationModel transcationModel = bankProcessor.onSaveTranscation(smsModel);
-            if (transcationModel != null) {
+            if (transcationModel != null && transcationModel.bankName!=null && transcationModel.spendingCard!=null) {
                 bankId = saveBank(transcationModel.bankName, transcationModel.spendingCard);
                 if (transcationModel.spentAt != null && !transcationModel.spentAt.isEmpty())//it means its a transcation sms
                 {
@@ -79,6 +79,7 @@ public class BankProcessor {
     }
 
     public long saveBank(String bankName, String cardNbr) {
+
         boolean bankExists = Cache.BanksNCards.containsKey(new Pair<>(bankName, cardNbr));
         Long bankId;
         if (!bankExists) {
